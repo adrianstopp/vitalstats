@@ -15,7 +15,7 @@ export type Country = {
 export type WBPoint = { date: string; value: number | null };
 
 const REST_URL =
-  "https://restcountries.com/v3.1/all?fields=cca3,name,flag,flags,capital,region,subregion,population,area,languages,timezones";
+  "https://restcountries.com/v3.1/all?fields=cca3,name,flag,flags,capital,region,population,area,languages,timezones";
 
 let cache: Promise<Country[]> | null = null;
 
