@@ -21,6 +21,8 @@ function Index() {
   const [dingOpen, setDingOpen] = useState(false);
   const [pickedDev, setPickedDev] = useState<Country | null>(null);
   const [pickedDing, setPickedDing] = useState<Country | null>(null);
+  const [continent, setContinent] = useState<string>("All");
+  const CONTINENTS = ["All", "Africa", "Americas", "Asia", "Europe", "Oceania"] as const;
 
   // ISO cca3 codes commonly classified as "developed economies" (IMF Advanced Economies + a few high-income micro-states).
   const DEVELOPED = new Set([
@@ -147,8 +149,9 @@ function Index() {
         )}
 
         {countries.length > 0 && !query && (() => {
-          const developed = sortedAll.filter((c) => DEVELOPED.has(c.cca3));
-          const developing = sortedAll.filter((c) => !DEVELOPED.has(c.cca3));
+          const inContinent = (c: Country) => continent === "All" || c.region === continent;
+          const developed = sortedAll.filter((c) => DEVELOPED.has(c.cca3) && inContinent(c));
+          const developing = sortedAll.filter((c) => !DEVELOPED.has(c.cca3) && inContinent(c));
           const Panel = ({
             title, list, open, setOpen, picked, setPicked,
           }: {
@@ -196,7 +199,26 @@ function Index() {
           );
           return (
             <>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Continent</span>
+                {CONTINENTS.map((k) => {
+                  const active = continent === k;
+                  return (
+                    <button
+                      key={k}
+                      onClick={() => setContinent(k)}
+                      className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                        active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background/50 text-muted-foreground hover:border-primary hover:text-primary"
+                      }`}
+                    >
+                      {k}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <Panel title="Developed countries" list={developed} open={devOpen} setOpen={setDevOpen} picked={pickedDev} setPicked={setPickedDev} />
                 <Panel title="Developing countries" list={developing} open={dingOpen} setOpen={setDingOpen} picked={pickedDing} setPicked={setPickedDing} />
               </div>
