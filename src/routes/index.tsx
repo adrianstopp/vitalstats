@@ -149,8 +149,9 @@ function Index() {
         )}
 
         {countries.length > 0 && !query && (() => {
-          const developed = sortedAll.filter((c) => DEVELOPED.has(c.cca3));
-          const developing = sortedAll.filter((c) => !DEVELOPED.has(c.cca3));
+          const inContinent = (c: Country) => continent === "All" || c.region === continent;
+          const developed = sortedAll.filter((c) => DEVELOPED.has(c.cca3) && inContinent(c));
+          const developing = sortedAll.filter((c) => !DEVELOPED.has(c.cca3) && inContinent(c));
           const Panel = ({
             title, list, open, setOpen, picked, setPicked,
           }: {
