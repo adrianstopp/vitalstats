@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CountryCodeRouteImport } from './routes/country.$code'
+import { Route as CompareABRouteImport } from './routes/compare.$a.$b'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const CountryCodeRoute = CountryCodeRouteImport.update({
   path: '/country/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareABRoute = CompareABRouteImport.update({
+  id: '/compare/$a/$b',
+  path: '/compare/$a/$b',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/country/$code': typeof CountryCodeRoute
+  '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/country/$code': typeof CountryCodeRoute
+  '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/country/$code': typeof CountryCodeRoute
+  '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/country/$code'
+  fullPaths: '/' | '/country/$code' | '/compare/$a/$b'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/country/$code'
-  id: '__root__' | '/' | '/country/$code'
+  to: '/' | '/country/$code' | '/compare/$a/$b'
+  id: '__root__' | '/' | '/country/$code' | '/compare/$a/$b'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CountryCodeRoute: typeof CountryCodeRoute
+  CompareABRoute: typeof CompareABRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare/$a/$b': {
+      id: '/compare/$a/$b'
+      path: '/compare/$a/$b'
+      fullPath: '/compare/$a/$b'
+      preLoaderRoute: typeof CompareABRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CountryCodeRoute: CountryCodeRoute,
+  CompareABRoute: CompareABRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
