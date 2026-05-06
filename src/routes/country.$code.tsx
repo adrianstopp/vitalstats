@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { fetchCountries, fmtNum, INDICATORS, type Country, type WBPoint } from "@/lib/countries";
+import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
 
 export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
@@ -31,30 +32,17 @@ function CountryPage() {
 
     Promise.all(
       INDICATORS.map(async (ind) => {
-        try {
-          const res = await fetch(
-            `https://api.worldbank.org/v2/country/${country.cca3}/indicator/${ind.id}?format=json&per_page=10`
-          );
-          const json = await res.json();
-          const points: WBPoint[] = json[1] ?? [];
-          const latest = points.find((p) => p.value !== null);
-          return [ind.id, latest ? { value: latest.value as number, year: latest.date } : null] as const;
-        } catch {
-          return [ind.id, null] as const;
-        }
+        const v = await fetchWBLatest(country.cca3, ind.id);
+        return [ind.id, v] as const;
       })
     ).then((results) => {
       setStats(Object.fromEntries(results));
       setLoadingStats(false);
     });
 
-    fetch(`https://api.worldbank.org/v2/country/${country.cca3}/indicator/SP.POP.TOTL?format=json&per_page=40`)
-      .then((r) => r.json())
-      .then((j) => {
-        const pts: WBPoint[] = (j[1] ?? []).filter((p: WBPoint) => p.value !== null).reverse();
-        setHistory(pts);
-      })
-      .catch(() => {});
+    fetchWBSeries(country.cca3, "SP.POP.TOTL", 40).then((pts) => {
+      setHistory(pts.filter((p) => p.value !== null).reverse());
+    });
   }, [country]);
 
   if (notFound) {
