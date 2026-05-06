@@ -122,8 +122,29 @@ export function CountryDashboard() {
         <aside className="rounded-3xl border border-border bg-card/70 p-4 backdrop-blur" style={{ boxShadow: "var(--shadow-soft)" }}>
           <input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search 250+ countries…"
+            onChange={(e) => {
+              const v = e.target.value;
+              setQuery(v);
+              const q = v.trim().toLowerCase();
+              if (!q) return;
+              const exact = countries.find((c) => c.name.common.toLowerCase() === q);
+              if (exact) setSelected(exact);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const q = query.trim().toLowerCase();
+                if (!q) return;
+                const match =
+                  countries.find((c) => c.name.common.toLowerCase() === q) ??
+                  countries.find((c) => c.name.common.toLowerCase().startsWith(q)) ??
+                  countries.find((c) => c.name.common.toLowerCase().includes(q));
+                if (match) {
+                  setSelected(match);
+                  setQuery("");
+                }
+              }
+            }}
+            placeholder="Search & press Enter (e.g. Sweden)…"
             className="w-full rounded-xl border border-border bg-background/70 px-4 py-3 text-sm outline-none ring-ring focus:ring-2"
           />
           <ul className="mt-4 max-h-[60vh] space-y-1 overflow-y-auto pr-1">
