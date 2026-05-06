@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { fetchCountries, fmtNum, INDICATORS, type Country, type WBPoint } from "@/lib/countries";
+import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
 
 export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
