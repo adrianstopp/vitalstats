@@ -20,7 +20,7 @@ type Country = {
 type WBPoint = { date: string; value: number | null };
 
 const REST_URL =
-  "https://restcountries.com/v3.1/all?fields=cca3,name,flag,flags,capital,region,subregion,population,area,languages,currencies,timezones,latlng,maps";
+  "https://restcountries.com/v3.1/all?fields=cca3,name,flag,flags,capital,region,subregion,population,area,languages,timezones";
 
 const INDICATORS: { id: string; label: string; format: (v: number) => string }[] = [
   { id: "SP.DYN.LE00.IN", label: "Life expectancy (years)", format: (v) => v.toFixed(1) },
