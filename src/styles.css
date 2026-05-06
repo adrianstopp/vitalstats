@@ -100,7 +100,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
+    font-family: "Times New Roman", Times, Georgia, serif;
     background-image: var(--gradient-radial);
     background-attachment: fixed;
   }
