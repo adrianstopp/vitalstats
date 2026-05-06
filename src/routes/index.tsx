@@ -16,9 +16,11 @@ function Index() {
     fetchCountries().then(setCountries);
   }, []);
 
+  const [allOpen, setAllOpen] = useState(false);
+
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return countries.slice(0, 12);
+    if (!q) return [];
     return countries
       .filter((c) => c.name.common.toLowerCase().includes(q))
       .sort((a, b) => {
@@ -28,6 +30,11 @@ function Index() {
       })
       .slice(0, 20);
   }, [countries, query]);
+
+  const sortedAll = useMemo(
+    () => [...countries].sort((a, b) => a.name.common.localeCompare(b.name.common)),
+    [countries],
+  );
 
   const go = (c: Country) => navigate({ to: "/country/$code", params: { code: c.cca3 } });
 
@@ -88,6 +95,43 @@ function Index() {
 
         {countries.length === 0 && (
           <p className="mt-4 text-center text-sm text-muted-foreground">Loading countries…</p>
+        )}
+
+        {countries.length > 0 && !query && (
+          <div className="mt-4 rounded-xl border border-border bg-background/50">
+            <button
+              type="button"
+              onClick={() => setAllOpen((o) => !o)}
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-secondary"
+            >
+              <span className="text-2xl">{sortedAll[0]?.flag}</span>
+              <span className="flex-1 truncate font-semibold">{sortedAll[0]?.name.common}</span>
+              <span className="text-xs text-muted-foreground">Browse all {sortedAll.length}</span>
+              <svg
+                width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                className={`text-muted-foreground transition-transform ${allOpen ? "rotate-180" : ""}`}
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {allOpen && (
+              <ul className="max-h-[50vh] space-y-1 overflow-y-auto border-t border-border p-2">
+                {sortedAll.map((c) => (
+                  <li key={c.cca3}>
+                    <button
+                      onClick={() => go(c)}
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition hover:bg-secondary"
+                    >
+                      <span className="text-xl">{c.flag}</span>
+                      <span className="flex-1 truncate">{c.name.common}</span>
+                      <span className="text-xs text-muted-foreground">{c.region}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         )}
       </div>
 
