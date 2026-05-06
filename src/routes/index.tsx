@@ -199,7 +199,26 @@ function Index() {
           );
           return (
             <>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Continent</span>
+                {CONTINENTS.map((k) => {
+                  const active = continent === k;
+                  return (
+                    <button
+                      key={k}
+                      onClick={() => setContinent(k)}
+                      className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                        active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background/50 text-muted-foreground hover:border-primary hover:text-primary"
+                      }`}
+                    >
+                      {k}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <Panel title="Developed countries" list={developed} open={devOpen} setOpen={setDevOpen} picked={pickedDev} setPicked={setPickedDev} />
                 <Panel title="Developing countries" list={developing} open={dingOpen} setOpen={setDingOpen} picked={pickedDing} setPicked={setPickedDing} />
               </div>
