@@ -28,18 +28,9 @@ const METRICS: Metric[] = [
 
 type Val = { value: number; year: string } | null;
 
+import { fetchWBLatest } from "@/lib/wb";
 async function fetchWB(code: string, indicator: string): Promise<Val> {
-  try {
-    const res = await fetch(
-      `https://api.worldbank.org/v2/country/${code}/indicator/${indicator}?format=json&per_page=15`,
-    );
-    const j = await res.json();
-    const points = (j[1] ?? []) as { date: string; value: number | null }[];
-    const latest = points.find((p) => p.value !== null);
-    return latest ? { value: latest.value as number, year: latest.date } : null;
-  } catch {
-    return null;
-  }
+  return fetchWBLatest(code, indicator);
 }
 
 async function fetchHDI(code: string): Promise<Val> {
