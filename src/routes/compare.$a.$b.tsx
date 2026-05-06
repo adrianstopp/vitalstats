@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
+import { HDI_2022 } from "@/lib/hdi";
 
 export const Route = createFileRoute("/compare/$a/$b")({
   component: ComparePage,
@@ -42,18 +43,9 @@ async function fetchWB(code: string, indicator: string): Promise<Val> {
 }
 
 async function fetchHDI(code: string): Promise<Val> {
-  // UNDP Human Development Report public dataset
-  try {
-    const res = await fetch(
-      `https://hdrdata.org/api/CompositeIndices/query?indicatorId=hdi&countryOrAggregation=${code}`,
-    );
-    if (!res.ok) return null;
-    const arr = (await res.json()) as { value: number | null; year: number }[];
-    const valid = arr.filter((p) => p.value !== null).sort((a, b) => b.year - a.year);
-    return valid[0] ? { value: valid[0].value as number, year: String(valid[0].year) } : null;
-  } catch {
-    return null;
-  }
+  const v = HDI_2022[code];
+  if (!v || v <= 0) return null;
+  return { value: v, year: "2022" };
 }
 
 function ComparePage() {
