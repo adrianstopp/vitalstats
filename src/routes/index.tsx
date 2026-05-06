@@ -16,9 +16,11 @@ function Index() {
     fetchCountries().then(setCountries);
   }, []);
 
+  const [allOpen, setAllOpen] = useState(false);
+
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return countries.slice(0, 12);
+    if (!q) return [];
     return countries
       .filter((c) => c.name.common.toLowerCase().includes(q))
       .sort((a, b) => {
@@ -28,6 +30,11 @@ function Index() {
       })
       .slice(0, 20);
   }, [countries, query]);
+
+  const sortedAll = useMemo(
+    () => [...countries].sort((a, b) => a.name.common.localeCompare(b.name.common)),
+    [countries],
+  );
 
   const go = (c: Country) => navigate({ to: "/country/$code", params: { code: c.cca3 } });
 
