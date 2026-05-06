@@ -17,6 +17,16 @@ function Index() {
   }, []);
 
   const [allOpen, setAllOpen] = useState(false);
+  const [devOpen, setDevOpen] = useState(false);
+  const [dingOpen, setDingOpen] = useState(false);
+
+  // ISO cca3 codes commonly classified as "developed economies" (IMF Advanced Economies + a few high-income micro-states).
+  const DEVELOPED = new Set([
+    "USA","CAN","GBR","FRA","DEU","ITA","JPN","AUS","NZL","AUT","BEL","DNK","FIN",
+    "GRC","ISL","IRL","ISR","LUX","NLD","NOR","PRT","ESP","SWE","CHE","KOR","SGP",
+    "TWN","CZE","EST","LVA","LTU","SVK","SVN","CYP","MLT","HUN","POL","HRV","SMR",
+    "AND","MCO","LIE","VAT",
+  ]);
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
