@@ -61,9 +61,9 @@ export function CountryDashboard() {
   }, []);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return countries.slice(0, 60);
+    if (!query.trim()) return countries;
     const q = query.toLowerCase();
-    return countries.filter((c) => c.name.common.toLowerCase().includes(q)).slice(0, 60);
+    return countries.filter((c) => c.name.common.toLowerCase().includes(q));
   }, [countries, query]);
 
   useEffect(() => {
