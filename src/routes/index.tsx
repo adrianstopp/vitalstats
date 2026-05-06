@@ -21,6 +21,8 @@ function Index() {
   const [dingOpen, setDingOpen] = useState(false);
   const [pickedDev, setPickedDev] = useState<Country | null>(null);
   const [pickedDing, setPickedDing] = useState<Country | null>(null);
+  const [continent, setContinent] = useState<string>("All");
+  const CONTINENTS = ["All", "Africa", "Americas", "Asia", "Europe", "Oceania"] as const;
 
   // ISO cca3 codes commonly classified as "developed economies" (IMF Advanced Economies + a few high-income micro-states).
   const DEVELOPED = new Set([
