@@ -19,6 +19,8 @@ function Index() {
   const [allOpen, setAllOpen] = useState(false);
   const [devOpen, setDevOpen] = useState(false);
   const [dingOpen, setDingOpen] = useState(false);
+  const [pickedDev, setPickedDev] = useState<Country | null>(null);
+  const [pickedDing, setPickedDing] = useState<Country | null>(null);
 
   // ISO cca3 codes commonly classified as "developed economies" (IMF Advanced Economies + a few high-income micro-states).
   const DEVELOPED = new Set([
