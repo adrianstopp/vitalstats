@@ -1,14 +1,123 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CountryDashboard } from "@/components/CountryDashboard";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const navigate = useNavigate();
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [query, setQuery] = useState("");
+  const [highlight, setHighlight] = useState(0);
+
+  useEffect(() => {
+    fetchCountries().then(setCountries);
+  }, []);
+
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return countries.slice(0, 12);
+    return countries
+      .filter((c) => c.name.common.toLowerCase().includes(q))
+      .sort((a, b) => {
+        const ai = a.name.common.toLowerCase().indexOf(q);
+        const bi = b.name.common.toLowerCase().indexOf(q);
+        return ai - bi;
+      })
+      .slice(0, 20);
+  }, [countries, query]);
+
+  const go = (c: Country) => navigate({ to: "/country/$code", params: { code: c.cca3 } });
+
   return (
-    <div className="min-h-screen">
-      <CountryDashboard />
+    <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 py-12 md:px-8 md:py-20">
+      <header>
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium uppercase tracking-widest text-clay backdrop-blur">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+          Live data · World Bank & REST Countries
+        </div>
+        <h1 className="mt-6 text-5xl font-black leading-[0.95] md:text-7xl">
+          The pulse of{" "}
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-ember)" }}>
+            every nation
+          </span>
+          .
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+          Search any country to open its full demographic profile — population, life expectancy, fertility, urbanisation and more.
+        </p>
+      </header>
+
+      <div className="mt-10 rounded-3xl border border-border bg-card/70 p-4 backdrop-blur md:p-6" style={{ boxShadow: "var(--shadow-warm)" }}>
+        <input
+          autoFocus
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setHighlight(0); }}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown") { e.preventDefault(); setHighlight((h) => Math.min(h + 1, matches.length - 1)); }
+            else if (e.key === "ArrowUp") { e.preventDefault(); setHighlight((h) => Math.max(h - 1, 0)); }
+            else if (e.key === "Enter" && matches[highlight]) { go(matches[highlight]); }
+          }}
+          placeholder="Search a country (e.g. Sweden) and press Enter…"
+          className="w-full rounded-xl border border-border bg-background/70 px-5 py-4 text-lg outline-none ring-ring focus:ring-2"
+        />
+
+        {matches.length > 0 && (
+          <ul className="mt-4 max-h-[50vh] space-y-1 overflow-y-auto pr-1">
+            {matches.map((c, i) => (
+              <li key={c.cca3}>
+                <button
+                  onClick={() => go(c)}
+                  onMouseEnter={() => setHighlight(i)}
+                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition ${
+                    i === highlight ? "bg-primary text-primary-foreground shadow-md" : "hover:bg-secondary"
+                  }`}
+                >
+                  <span className="text-2xl">{c.flag}</span>
+                  <span className="flex-1 truncate font-semibold">{c.name.common}</span>
+                  <span className={`text-xs ${i === highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                    {fmtNum(c.population)} · {c.region}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {countries.length === 0 && (
+          <p className="mt-4 text-center text-sm text-muted-foreground">Loading countries…</p>
+        )}
+      </div>
+
+      {countries.length > 0 && !query && (
+        <div className="mt-10">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Most populous</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {[...countries].sort((a, b) => b.population - a.population).slice(0, 6).map((c) => (
+              <Link
+                key={c.cca3}
+                to="/country/$code"
+                params={{ code: c.cca3 }}
+                className="group rounded-2xl border border-border bg-card/70 p-4 backdrop-blur transition hover:-translate-y-0.5 hover:border-primary"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{c.flag}</span>
+                  <div>
+                    <div className="font-bold group-hover:text-primary">{c.name.common}</div>
+                    <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <footer className="mt-auto pt-16 text-center text-xs text-muted-foreground">
+        Data: REST Countries · World Bank Open Data
+      </footer>
     </div>
   );
 }
