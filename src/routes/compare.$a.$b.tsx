@@ -163,6 +163,19 @@ function ComparePage() {
         </p>
       </section>
 
+      <DualLineChart
+        title="Population over time"
+        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        a={popSeries.a} b={popSeries.b} ca={ca} cb={cb}
+        format={(v) => fmtNum(v)}
+      />
+      <DualLineChart
+        title="Economic growth (GDP, current US$)"
+        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        a={gdpSeries.a} b={gdpSeries.b} ca={ca} cb={cb}
+        format={(v) => `$${fmtNum(v)}`}
+      />
+
       <div className="grid gap-3 sm:grid-cols-2">
         <Link to="/country/$code" params={{ code: ca.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
           Full profile: {ca.flag} {ca.name.common}
