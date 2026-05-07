@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 import { HDI_2022 } from "@/lib/hdi";
+import { fetchWBSeries } from "@/lib/wb";
+
+type Series = { date: string; value: number | null }[];
 
 export const Route = createFileRoute("/compare/$a/$b")({
   component: ComparePage,
