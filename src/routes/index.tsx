@@ -57,7 +57,7 @@ function Index() {
       <header>
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium uppercase tracking-widest text-clay backdrop-blur">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          Live data · World Bank & REST Countries
+          Live data · World Bank, UN & Worldometer-aligned
         </div>
         <h1 className="mt-6 text-5xl font-black leading-[0.95] md:text-7xl">
           The pulse of{" "}
