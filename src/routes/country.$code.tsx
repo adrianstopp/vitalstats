@@ -7,6 +7,26 @@ export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
 });
 
+type Wiki = { extract: string; thumbnail?: string; url: string } | null;
+
+async function fetchWiki(name: string): Promise<Wiki> {
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`,
+    );
+    if (!res.ok) return null;
+    const j = await res.json();
+    if (!j.extract) return null;
+    return {
+      extract: j.extract,
+      thumbnail: j.thumbnail?.source,
+      url: j.content_urls?.desktop?.page ?? `https://en.wikipedia.org/wiki/${encodeURIComponent(name)}`,
+    };
+  } catch {
+    return null;
+  }
+}
+
 function CountryPage() {
   const { code } = Route.useParams();
   const navigate = useNavigate();
@@ -15,6 +35,7 @@ function CountryPage() {
   const [stats, setStats] = useState<Record<string, { value: number; year: string } | null>>({});
   const [loadingStats, setLoadingStats] = useState(true);
   const [history, setHistory] = useState<WBPoint[]>([]);
+  const [wiki, setWiki] = useState<Wiki>(null);
 
   useEffect(() => {
     fetchCountries().then((all) => {
@@ -29,6 +50,7 @@ function CountryPage() {
     setLoadingStats(true);
     setStats({});
     setHistory([]);
+    setWiki(null);
 
     Promise.all(
       INDICATORS.map(async (ind) => {
@@ -43,6 +65,8 @@ function CountryPage() {
     fetchWBSeries(country.cca3, "SP.POP.TOTL", 40).then((pts) => {
       setHistory(pts.filter((p) => p.value !== null).reverse());
     });
+
+    fetchWiki(country.name.common).then(setWiki);
   }, [country]);
 
   if (notFound) {
