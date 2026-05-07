@@ -32,7 +32,7 @@ function CountryPage() {
 
     Promise.all(
       INDICATORS.map(async (ind) => {
-        const v = await fetchWBLatest(country.cca3, ind.id);
+        const v = await fetchWBLatest(country.cca3, ind.id, 60);
         return [ind.id, v] as const;
       })
     ).then((results) => {
