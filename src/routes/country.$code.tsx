@@ -142,22 +142,6 @@ function CountryPage() {
         );
       })()}
 
-      {wiki && (
-        <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
-          <h2 className="text-2xl font-bold">About {country.name.common}</h2>
-          <div className="mt-4 flex flex-col gap-5 md:flex-row">
-            {wiki.thumbnail && (
-              <img src={wiki.thumbnail} alt={country.name.common} className="h-40 w-40 flex-none rounded-2xl object-cover ring-1 ring-border" />
-            )}
-            <div className="flex-1">
-              <p className="text-sm leading-relaxed text-foreground/90">{wiki.extract}</p>
-              <a href={wiki.url} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary hover:underline">
-                Read on Wikipedia →
-              </a>
-            </div>
-          </div>
-        </section>
-      )}
 
       {history.length > 1 && <PopulationChart data={history} />}
     </div>
