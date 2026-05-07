@@ -7,26 +7,6 @@ export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
 });
 
-type Wiki = { extract: string; thumbnail?: string; url: string } | null;
-
-async function fetchWiki(name: string): Promise<Wiki> {
-  try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`,
-    );
-    if (!res.ok) return null;
-    const j = await res.json();
-    if (!j.extract) return null;
-    return {
-      extract: j.extract,
-      thumbnail: j.thumbnail?.source,
-      url: j.content_urls?.desktop?.page ?? `https://en.wikipedia.org/wiki/${encodeURIComponent(name)}`,
-    };
-  } catch {
-    return null;
-  }
-}
-
 function CountryPage() {
   const { code } = Route.useParams();
   const navigate = useNavigate();
@@ -35,7 +15,6 @@ function CountryPage() {
   const [stats, setStats] = useState<Record<string, { value: number; year: string } | null>>({});
   const [loadingStats, setLoadingStats] = useState(true);
   const [history, setHistory] = useState<WBPoint[]>([]);
-  const [wiki, setWiki] = useState<Wiki>(null);
 
   useEffect(() => {
     fetchCountries().then((all) => {
@@ -50,7 +29,6 @@ function CountryPage() {
     setLoadingStats(true);
     setStats({});
     setHistory([]);
-    setWiki(null);
 
     Promise.all(
       INDICATORS.map(async (ind) => {
@@ -65,8 +43,6 @@ function CountryPage() {
     fetchWBSeries(country.cca3, "SP.POP.TOTL", 40).then((pts) => {
       setHistory(pts.filter((p) => p.value !== null).reverse());
     });
-
-    fetchWiki(country.name.common).then(setWiki);
   }, [country]);
 
   if (notFound) {
@@ -166,22 +142,6 @@ function CountryPage() {
         );
       })()}
 
-      {wiki && (
-        <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
-          <h2 className="text-2xl font-bold">About {country.name.common}</h2>
-          <div className="mt-4 flex flex-col gap-5 md:flex-row">
-            {wiki.thumbnail && (
-              <img src={wiki.thumbnail} alt={country.name.common} className="h-40 w-40 flex-none rounded-2xl object-cover ring-1 ring-border" />
-            )}
-            <div className="flex-1">
-              <p className="text-sm leading-relaxed text-foreground/90">{wiki.extract}</p>
-              <a href={wiki.url} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary hover:underline">
-                Read on Wikipedia →
-              </a>
-            </div>
-          </div>
-        </section>
-      )}
 
       {history.length > 1 && <PopulationChart data={history} />}
     </div>
