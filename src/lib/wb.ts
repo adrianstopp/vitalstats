@@ -22,15 +22,27 @@ async function fetchWithRetry(url: string, attempts = 3): Promise<Response> {
 export async function fetchWBLatest(
   code: string,
   indicator: string,
-  perPage = 20,
+  perPage = 60,
 ): Promise<WBLatest> {
   try {
+    // mrv=1 asks the World Bank for the single Most Recent Value (non-null),
+    // which is more reliable than scanning per_page results when the latest
+    // year hasn't been published yet for a given country/indicator.
     const res = await fetchWithRetry(
-      `https://api.worldbank.org/v2/country/${code}/indicator/${indicator}?format=json&per_page=${perPage}`,
+      `https://api.worldbank.org/v2/country/${code}/indicator/${indicator}?format=json&mrv=1`,
     );
     const json = await res.json();
-    const points = (json[1] ?? []) as { date: string; value: number | null }[];
-    const latest = points.find((p) => p.value !== null && p.value !== undefined);
+    let points = (json[1] ?? []) as { date: string; value: number | null }[];
+    let latest = points.find((p) => p.value !== null && p.value !== undefined);
+    if (!latest) {
+      // Fallback: pull a wider window and pick the newest non-null value.
+      const res2 = await fetchWithRetry(
+        `https://api.worldbank.org/v2/country/${code}/indicator/${indicator}?format=json&per_page=${perPage}`,
+      );
+      const json2 = await res2.json();
+      points = (json2[1] ?? []) as { date: string; value: number | null }[];
+      latest = points.find((p) => p.value !== null && p.value !== undefined);
+    }
     return latest
       ? { value: latest.value as number, year: latest.date }
       : null;
