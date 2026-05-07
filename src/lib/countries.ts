@@ -50,4 +50,6 @@ export const INDICATORS: { id: string; label: string; format: (v: number) => str
   { id: "SP.POP.65UP.TO.ZS", label: "Population ages 65+", format: (v) => `${v.toFixed(1)}%` },
   { id: "SP.DYN.IMRT.IN", label: "Infant mortality (per 1k)", format: (v) => v.toFixed(1) },
   { id: "NY.GDP.PCAP.CD", label: "GDP per capita (USD)", format: (v) => `$${Math.round(v).toLocaleString()}` },
+  { id: "EN.ATM.PM25.MC.M3", label: "Air pollution (PM2.5 µg/m³)", format: (v) => v.toFixed(1) },
+  { id: "EN.GHG.CO2.PC.CE.AR5", label: "CO₂ emissions (t per capita)", format: (v) => v.toFixed(2) },
 ];
