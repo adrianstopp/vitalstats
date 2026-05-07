@@ -47,6 +47,8 @@ function ComparePage() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [data, setData] = useState<Record<string, { a: Val; b: Val }>>({});
   const [loading, setLoading] = useState(true);
+  const [popSeries, setPopSeries] = useState<{ a: Series; b: Series }>({ a: [], b: [] });
+  const [gdpSeries, setGdpSeries] = useState<{ a: Series; b: Series }>({ a: [], b: [] });
 
   useEffect(() => { fetchCountries().then(setCountries); }, []);
 
