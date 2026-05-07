@@ -131,29 +131,57 @@ function CountryPage() {
         );
       })()}
 
-      <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
-        <div className="mb-5 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">Recent indicators</h2>
-            <p className="text-sm text-muted-foreground">Latest values from the World Bank Open Data API</p>
-          </div>
-          {loadingStats && <span className="text-xs text-muted-foreground">Loading…</span>}
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {INDICATORS.map((ind) => {
-            const s = stats[ind.id];
-            return (
-              <div key={ind.id} className="rounded-2xl border border-border bg-background/50 p-4">
-                <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{ind.label}</div>
-                <div className="mt-2 text-2xl font-bold" style={{ color: "var(--ember)" }}>
-                  {s ? ind.format(s.value) : loadingStats ? "…" : "—"}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">{s ? `as of ${s.year}` : "no data"}</div>
+      {(() => {
+        const allEmpty = !loadingStats && Object.values(stats).every((v) => !v);
+        return (
+          <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
+            <div className="mb-5 flex items-end justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Recent indicators</h2>
+                <p className="text-sm text-muted-foreground">
+                  {allEmpty
+                    ? "World Bank does not publish indicators for this territory — see overview below."
+                    : "Latest values from the World Bank Open Data API"}
+                </p>
               </div>
-            );
-          })}
-        </div>
-      </section>
+              {loadingStats && <span className="text-xs text-muted-foreground">Loading…</span>}
+            </div>
+            {!allEmpty && (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {INDICATORS.map((ind) => {
+                  const s = stats[ind.id];
+                  return (
+                    <div key={ind.id} className="rounded-2xl border border-border bg-background/50 p-4">
+                      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{ind.label}</div>
+                      <div className="mt-2 text-2xl font-bold" style={{ color: "var(--ember)" }}>
+                        {s ? ind.format(s.value) : loadingStats ? "…" : "—"}
+                      </div>
+                      <div className="mt-1 text-xs text-muted-foreground">{s ? `as of ${s.year}` : "no data"}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        );
+      })()}
+
+      {wiki && (
+        <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
+          <h2 className="text-2xl font-bold">About {country.name.common}</h2>
+          <div className="mt-4 flex flex-col gap-5 md:flex-row">
+            {wiki.thumbnail && (
+              <img src={wiki.thumbnail} alt={country.name.common} className="h-40 w-40 flex-none rounded-2xl object-cover ring-1 ring-border" />
+            )}
+            <div className="flex-1">
+              <p className="text-sm leading-relaxed text-foreground/90">{wiki.extract}</p>
+              <a href={wiki.url} target="_blank" rel="noreferrer" className="mt-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary hover:underline">
+                Read on Wikipedia →
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {history.length > 1 && <PopulationChart data={history} />}
     </div>
