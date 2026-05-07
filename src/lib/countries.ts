@@ -39,6 +39,9 @@ export function fmtNum(n: number) {
 }
 
 export const INDICATORS: { id: string; label: string; format: (v: number) => string }[] = [
+  { id: "SP.POP.TOTL", label: "Population (total)", format: (v) => fmtNum(v) },
+  { id: "SP.DYN.CBRT.IN", label: "Birth rate (per 1k people)", format: (v) => v.toFixed(1) },
+  { id: "SP.DYN.CDRT.IN", label: "Death rate (per 1k people)", format: (v) => v.toFixed(1) },
   { id: "SP.DYN.LE00.IN", label: "Life expectancy (years)", format: (v) => v.toFixed(1) },
   { id: "SP.DYN.TFRT.IN", label: "Fertility rate (births/woman)", format: (v) => v.toFixed(2) },
   { id: "SP.POP.GROW", label: "Population growth (annual %)", format: (v) => `${v.toFixed(2)}%` },
