@@ -44,52 +44,52 @@
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 0.625rem;
 
-  /* Calm palette: deep sea blue, moss green, soft beige */
-  --background: oklch(0.96 0.02 85);                /* warm beige */
-  --foreground: oklch(0.24 0.04 220);
+  /* Elegant palette: ivory, deep navy, muted gold, burgundy */
+  --background: oklch(0.97 0.005 90);               /* ivory */
+  --foreground: oklch(0.20 0.02 250);               /* near-black navy */
 
-  --card: oklch(0.98 0.015 85);
-  --card-foreground: oklch(0.24 0.04 220);
+  --card: oklch(0.99 0.003 90);
+  --card-foreground: oklch(0.20 0.02 250);
 
-  --popover: oklch(0.98 0.015 85);
-  --popover-foreground: oklch(0.24 0.04 220);
+  --popover: oklch(0.99 0.003 90);
+  --popover-foreground: oklch(0.20 0.02 250);
 
-  --primary: oklch(0.50 0.13 220);                  /* deep sea blue */
-  --primary-foreground: oklch(0.98 0.01 85);
+  --primary: oklch(0.28 0.045 255);                 /* deep navy */
+  --primary-foreground: oklch(0.97 0.005 90);
 
-  --secondary: oklch(0.92 0.03 150);
-  --secondary-foreground: oklch(0.28 0.06 220);
+  --secondary: oklch(0.93 0.01 90);                 /* warm stone */
+  --secondary-foreground: oklch(0.25 0.03 250);
 
-  --muted: oklch(0.93 0.02 85);
-  --muted-foreground: oklch(0.45 0.04 220);
+  --muted: oklch(0.94 0.008 90);
+  --muted-foreground: oklch(0.48 0.015 250);
 
-  --accent: oklch(0.70 0.13 160);                   /* moss / teal green */
-  --accent-foreground: oklch(0.20 0.05 220);
+  --accent: oklch(0.62 0.08 75);                    /* muted gold */
+  --accent-foreground: oklch(0.20 0.02 250);
 
-  --destructive: oklch(0.55 0.20 27);
-  --destructive-foreground: oklch(0.98 0.01 85);
+  --destructive: oklch(0.42 0.12 25);               /* burgundy */
+  --destructive-foreground: oklch(0.97 0.005 90);
 
-  --border: oklch(0.87 0.02 85);
-  --input: oklch(0.92 0.02 85);
-  --ring: oklch(0.60 0.13 200);
+  --border: oklch(0.88 0.008 90);
+  --input: oklch(0.92 0.008 90);
+  --ring: oklch(0.45 0.04 255);
 
-  --sand: oklch(0.90 0.04 85);                      /* beige */
-  --sea: oklch(0.55 0.14 230);                      /* sea blue */
-  --moss: oklch(0.55 0.12 155);                     /* moss green */
-  --clay: oklch(0.45 0.06 220);                     /* deep slate-blue */
-  --ember: oklch(0.35 0.10 220);                    /* deep navy */
-  --sun: oklch(0.85 0.10 110);                      /* soft sage */
-  --coral: oklch(0.70 0.12 180);                    /* aqua */
+  --sand: oklch(0.91 0.012 85);                     /* parchment */
+  --sea: oklch(0.35 0.05 250);                      /* slate navy */
+  --moss: oklch(0.40 0.05 160);                     /* deep emerald */
+  --clay: oklch(0.50 0.04 30);                      /* dusty rose-brown */
+  --ember: oklch(0.32 0.07 25);                     /* burgundy */
+  --sun: oklch(0.62 0.08 75);                       /* muted gold */
+  --coral: oklch(0.55 0.07 35);                     /* terracotta */
 
-  --gradient-warm: linear-gradient(135deg, var(--sea) 0%, var(--moss) 60%, var(--sand) 100%);
-  --gradient-ember: linear-gradient(160deg, var(--ember) 0%, var(--primary) 55%, var(--moss) 100%);
-  --gradient-radial: radial-gradient(circle at 20% 10%, var(--sun) 0%, transparent 45%),
-                     radial-gradient(circle at 90% 80%, var(--moss) 0%, transparent 50%);
+  --gradient-warm: linear-gradient(135deg, var(--sea) 0%, var(--ember) 60%, var(--sand) 100%);
+  --gradient-ember: linear-gradient(160deg, var(--ember) 0%, var(--primary) 55%, var(--sea) 100%);
+  --gradient-radial: radial-gradient(circle at 20% 10%, color-mix(in oklab, var(--sun) 25%, transparent) 0%, transparent 45%),
+                     radial-gradient(circle at 90% 80%, color-mix(in oklab, var(--sea) 18%, transparent) 0%, transparent 50%);
 
-  --shadow-warm: 0 20px 60px -20px color-mix(in oklab, var(--ember) 45%, transparent);
-  --shadow-soft: 0 8px 30px -12px color-mix(in oklab, var(--clay) 35%, transparent);
+  --shadow-warm: 0 20px 60px -20px color-mix(in oklab, var(--ember) 30%, transparent);
+  --shadow-soft: 0 8px 30px -12px color-mix(in oklab, var(--primary) 25%, transparent);
 }
 
 @layer base {
