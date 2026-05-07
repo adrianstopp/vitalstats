@@ -67,6 +67,23 @@ function ComparePage() {
         return [m.id, { a: va, b: vb }] as const;
       }),
     ).then((r) => { setData(Object.fromEntries(r)); setLoading(false); });
+
+    // 65-year history (World Bank coverage starts in 1960 — the longest free
+    // open dataset for country-level population/GDP).
+    Promise.all([
+      fetchWBSeries(a, "SP.POP.TOTL", 200),
+      fetchWBSeries(b, "SP.POP.TOTL", 200),
+    ]).then(([sa, sb]) => setPopSeries({
+      a: sa.filter((p) => p.value !== null).reverse(),
+      b: sb.filter((p) => p.value !== null).reverse(),
+    }));
+    Promise.all([
+      fetchWBSeries(a, "NY.GDP.MKTP.CD", 200),
+      fetchWBSeries(b, "NY.GDP.MKTP.CD", 200),
+    ]).then(([sa, sb]) => setGdpSeries({
+      a: sa.filter((p) => p.value !== null).reverse(),
+      b: sb.filter((p) => p.value !== null).reverse(),
+    }));
   }, [a, b]);
 
   if (countries.length && (!ca || !cb)) {
