@@ -22,7 +22,7 @@ async function fetchWithRetry(url: string, attempts = 3): Promise<Response> {
 export async function fetchWBLatest(
   code: string,
   indicator: string,
-  perPage = 20,
+  perPage = 60,
 ): Promise<WBLatest> {
   try {
     const res = await fetchWithRetry(
