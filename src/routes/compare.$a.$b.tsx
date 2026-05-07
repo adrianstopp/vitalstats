@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 import { HDI_2022 } from "@/lib/hdi";
+import { fetchWBSeries } from "@/lib/wb";
+
+type Series = { date: string; value: number | null }[];
 
 export const Route = createFileRoute("/compare/$a/$b")({
   component: ComparePage,
@@ -44,6 +47,8 @@ function ComparePage() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [data, setData] = useState<Record<string, { a: Val; b: Val }>>({});
   const [loading, setLoading] = useState(true);
+  const [popSeries, setPopSeries] = useState<{ a: Series; b: Series }>({ a: [], b: [] });
+  const [gdpSeries, setGdpSeries] = useState<{ a: Series; b: Series }>({ a: [], b: [] });
 
   useEffect(() => { fetchCountries().then(setCountries); }, []);
 
@@ -62,6 +67,23 @@ function ComparePage() {
         return [m.id, { a: va, b: vb }] as const;
       }),
     ).then((r) => { setData(Object.fromEntries(r)); setLoading(false); });
+
+    // 65-year history (World Bank coverage starts in 1960 — the longest free
+    // open dataset for country-level population/GDP).
+    Promise.all([
+      fetchWBSeries(a, "SP.POP.TOTL", 200),
+      fetchWBSeries(b, "SP.POP.TOTL", 200),
+    ]).then(([sa, sb]) => setPopSeries({
+      a: sa.filter((p) => p.value !== null).reverse(),
+      b: sb.filter((p) => p.value !== null).reverse(),
+    }));
+    Promise.all([
+      fetchWBSeries(a, "NY.GDP.MKTP.CD", 200),
+      fetchWBSeries(b, "NY.GDP.MKTP.CD", 200),
+    ]).then(([sa, sb]) => setGdpSeries({
+      a: sa.filter((p) => p.value !== null).reverse(),
+      b: sb.filter((p) => p.value !== null).reverse(),
+    }));
   }, [a, b]);
 
   if (countries.length && (!ca || !cb)) {
@@ -141,6 +163,19 @@ function ComparePage() {
         </p>
       </section>
 
+      <DualLineChart
+        title="Population over time"
+        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        a={popSeries.a} b={popSeries.b} ca={ca} cb={cb}
+        format={(v) => fmtNum(v)}
+      />
+      <DualLineChart
+        title="Economic growth (GDP, current US$)"
+        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        a={gdpSeries.a} b={gdpSeries.b} ca={ca} cb={cb}
+        format={(v) => `$${fmtNum(v)}`}
+      />
+
       <div className="grid gap-3 sm:grid-cols-2">
         <Link to="/country/$code" params={{ code: ca.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
           Full profile: {ca.flag} {ca.name.common}
@@ -164,5 +199,69 @@ function CountryHeader({ c, align }: { c: Country; align: "left" | "right" }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function DualLineChart({
+  title, subtitle, a, b, ca, cb, format,
+}: {
+  title: string; subtitle: string;
+  a: Series; b: Series; ca: Country; cb: Country;
+  format: (v: number) => string;
+}) {
+  const w = 800, h = 280, padL = 50, padR = 20, padT = 24, padB = 30;
+
+  if (a.length < 2 && b.length < 2) {
+    return (
+      <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
+        <h2 className="text-2xl font-bold">{title}</h2>
+        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <p className="mt-6 text-sm text-muted-foreground">No historical data available for this pair.</p>
+      </section>
+    );
+  }
+
+  const allYears = [...a, ...b].map((p) => Number(p.date));
+  const minYear = Math.min(...allYears);
+  const maxYear = Math.max(...allYears);
+  const allValues = [...a, ...b].map((p) => p.value as number);
+  const minVal = 0;
+  const maxVal = Math.max(...allValues);
+
+  const xs = (year: number) => padL + ((year - minYear) / Math.max(maxYear - minYear, 1)) * (w - padL - padR);
+  const ys = (v: number) => h - padB - ((v - minVal) / Math.max(maxVal - minVal, 1)) * (h - padT - padB);
+
+  const toPath = (s: Series) =>
+    s.map((d, i) => `${i === 0 ? "M" : "L"} ${xs(Number(d.date)).toFixed(1)} ${ys(d.value as number).toFixed(1)}`).join(" ");
+
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((t) => minVal + t * (maxVal - minVal));
+  const xTicks = [minYear, Math.round((minYear + maxYear) / 2), maxYear];
+
+  return (
+    <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-bold">{title}</h2>
+          <p className="text-sm text-muted-foreground">{subtitle}</p>
+        </div>
+        <div className="flex gap-4 text-xs">
+          <span className="inline-flex items-center gap-2"><span className="h-1 w-4 rounded" style={{ background: "var(--ember)" }} /> {ca.flag} {ca.name.common}</span>
+          <span className="inline-flex items-center gap-2"><span className="h-1 w-4 rounded" style={{ background: "var(--coral)" }} /> {cb.flag} {cb.name.common}</span>
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${w} ${h}`} className="mt-4 w-full">
+        {yTicks.map((t, i) => (
+          <g key={i}>
+            <line x1={padL} x2={w - padR} y1={ys(t)} y2={ys(t)} stroke="var(--border)" strokeDasharray="3 3" />
+            <text x={padL - 6} y={ys(t) + 4} textAnchor="end" fontSize="10" fill="var(--muted-foreground)">{format(t)}</text>
+          </g>
+        ))}
+        {xTicks.map((y, i) => (
+          <text key={i} x={xs(y)} y={h - 8} textAnchor="middle" fontSize="10" fill="var(--muted-foreground)">{y}</text>
+        ))}
+        {a.length > 1 && <path d={toPath(a)} fill="none" stroke="var(--ember)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
+        {b.length > 1 && <path d={toPath(b)} fill="none" stroke="var(--coral)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
+      </svg>
+    </section>
   );
 }
