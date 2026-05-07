@@ -94,11 +94,18 @@ function CountryPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <StatCard label="Population" value={country.population.toLocaleString()} sub={`${fmtNum(country.population)} people`} accent="primary" />
-        <StatCard label="Density" value={`${(country.population / Math.max(country.area, 1)).toFixed(1)}`} sub="people / km²" accent="coral" />
-        <StatCard label="Timezones" value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
-      </section>
+      {(() => {
+        const wbPop = stats["SP.POP.TOTL"];
+        const pop = wbPop?.value ?? country.population;
+        const popSub = wbPop ? `${fmtNum(pop)} people · World Bank ${wbPop.year}` : `${fmtNum(pop)} people`;
+        return (
+          <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <StatCard label="Population" value={Math.round(pop).toLocaleString()} sub={popSub} accent="primary" />
+            <StatCard label="Density" value={`${(pop / Math.max(country.area, 1)).toFixed(1)}`} sub="people / km²" accent="coral" />
+            <StatCard label="Timezones" value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
+          </section>
+        );
+      })()}
 
       <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
         <div className="mb-5 flex items-end justify-between">
