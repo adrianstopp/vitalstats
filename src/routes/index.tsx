@@ -236,29 +236,40 @@ function Index() {
         })()}
       </div>
 
-      {countries.length > 0 && !query && (
-        <div className="mt-10">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Most populous</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {[...countries].sort((a, b) => b.population - a.population).slice(0, 6).map((c) => (
-              <Link
-                key={c.cca3}
-                to="/country/$code"
-                params={{ code: c.cca3 }}
-                className="group rounded-2xl border border-border bg-card/70 p-4 backdrop-blur transition hover:-translate-y-0.5 hover:border-primary"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{c.flag}</span>
-                  <div>
-                    <div className="font-bold group-hover:text-primary">{c.name.common}</div>
-                    <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
-                  </div>
+      {countries.length > 0 && !query && (() => {
+        const ranked = [...countries].filter((c) => c.population > 0);
+        const sections: { title: string; list: Country[] }[] = [
+          { title: "Most populous", list: [...ranked].sort((a, b) => b.population - a.population).slice(0, 6) },
+          { title: "Least populous", list: [...ranked].sort((a, b) => a.population - b.population).slice(0, 6) },
+        ];
+        return (
+          <div className="mt-10 space-y-8">
+            {sections.map((s) => (
+              <div key={s.title}>
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">{s.title}</h2>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+                  {s.list.map((c) => (
+                    <Link
+                      key={c.cca3}
+                      to="/country/$code"
+                      params={{ code: c.cca3 }}
+                      className="group rounded-2xl border border-border bg-card/70 p-4 backdrop-blur transition hover:-translate-y-0.5 hover:border-primary"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl">{c.flag}</span>
+                        <div>
+                          <div className="font-bold group-hover:text-primary">{c.name.common}</div>
+                          <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       <footer className="mt-auto pt-16 text-center text-xs text-muted-foreground">
         Data: REST Countries · World Bank Open Data
