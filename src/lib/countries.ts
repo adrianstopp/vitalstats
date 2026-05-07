@@ -21,12 +21,33 @@ let cache: Promise<Country[]> | null = null;
 
 export function fetchCountries(): Promise<Country[]> {
   if (!cache) {
-    cache = fetch(REST_URL)
-      .then((r) => r.json())
-      .then((data: Country[]) =>
-        data.sort((a, b) => a.name.common.localeCompare(b.name.common))
-      )
-      .catch(() => []);
+    cache = (async () => {
+      const [restRes, wbRes] = await Promise.all([
+        fetch(REST_URL).then((r) => r.json()).catch(() => [] as Country[]),
+        // Latest World Bank population for every country in one call (mrnev=1
+        // returns the most recent non-empty value, typically 2024 in 2026).
+        fetch(
+          "https://api.worldbank.org/v2/country/all/indicator/SP.POP.TOTL?format=json&mrnev=1&per_page=400",
+        )
+          .then((r) => r.json())
+          .catch(() => null),
+      ]);
+      const data = (restRes as Country[]) ?? [];
+      const wbMap = new Map<string, number>();
+      if (Array.isArray(wbRes) && Array.isArray(wbRes[1])) {
+        for (const row of wbRes[1] as { countryiso3code: string; value: number | null }[]) {
+          if (row.countryiso3code && typeof row.value === "number") {
+            wbMap.set(row.countryiso3code, row.value);
+          }
+        }
+      }
+      // Override REST Countries' stale population with the latest World Bank value.
+      for (const c of data) {
+        const v = wbMap.get(c.cca3);
+        if (v) c.population = Math.round(v);
+      }
+      return data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+    })().catch(() => [] as Country[]);
   }
   return cache;
 }
