@@ -13,6 +13,7 @@ export const Route = createFileRoute("/country/$code")({
 
 function CountryPage() {
   const { code } = Route.useParams();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const { isFavourite, toggle } = useFavourites();
   const [country, setCountry] = useState<Country | null>(null);
