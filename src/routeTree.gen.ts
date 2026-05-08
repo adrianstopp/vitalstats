@@ -13,6 +13,7 @@ import { Route as SourcesRouteImport } from './routes/sources'
 import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegionSlugRouteImport } from './routes/region.$slug'
 import { Route as CountryCodeRouteImport } from './routes/country.$code'
 import { Route as CompareABRouteImport } from './routes/compare.$a.$b'
 
@@ -36,6 +37,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegionSlugRoute = RegionSlugRouteImport.update({
+  id: '/region/$slug',
+  path: '/region/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountryCodeRoute = CountryCodeRouteImport.update({
   id: '/country/$code',
   path: '/country/$code',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/glossary': typeof GlossaryRoute
   '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
+  '/region/$slug': typeof RegionSlugRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/glossary': typeof GlossaryRoute
   '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
+  '/region/$slug': typeof RegionSlugRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/glossary': typeof GlossaryRoute
   '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
+  '/region/$slug': typeof RegionSlugRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/sources'
     | '/country/$code'
+    | '/region/$slug'
     | '/compare/$a/$b'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/sources'
     | '/country/$code'
+    | '/region/$slug'
     | '/compare/$a/$b'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/glossary'
     | '/sources'
     | '/country/$code'
+    | '/region/$slug'
     | '/compare/$a/$b'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   GlossaryRoute: typeof GlossaryRoute
   SourcesRoute: typeof SourcesRoute
   CountryCodeRoute: typeof CountryCodeRoute
+  RegionSlugRoute: typeof RegionSlugRoute
   CompareABRoute: typeof CompareABRoute
 }
 
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/region/$slug': {
+      id: '/region/$slug'
+      path: '/region/$slug'
+      fullPath: '/region/$slug'
+      preLoaderRoute: typeof RegionSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/country/$code': {
       id: '/country/$code'
       path: '/country/$code'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   GlossaryRoute: GlossaryRoute,
   SourcesRoute: SourcesRoute,
   CountryCodeRoute: CountryCodeRoute,
+  RegionSlugRoute: RegionSlugRoute,
   CompareABRoute: CompareABRoute,
 }
 export const routeTree = rootRouteImport
