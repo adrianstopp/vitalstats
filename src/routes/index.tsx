@@ -342,7 +342,7 @@ function Index() {
                         <span className="text-3xl">{c.flag}</span>
                         <div>
                           <div className="font-bold group-hover:text-primary">{c.name.common}</div>
-                          <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                          <div className="text-xs text-muted-foreground">{fmtNum(c.population)} {t("label.people")}</div>
                         </div>
                       </div>
                     </Link>
