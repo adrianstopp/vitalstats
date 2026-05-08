@@ -114,7 +114,15 @@ function Index() {
         )}
 
         {countries.length === 0 && (
-          <p className="mt-4 text-center text-sm text-muted-foreground">Loading countries…</p>
+          <ul className="mt-4 space-y-2" aria-label="Loading countries">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <li key={i} className="flex items-center gap-3 rounded-xl px-4 py-3">
+                <span className="h-7 w-7 animate-pulse rounded-full bg-muted" />
+                <span className="h-4 flex-1 animate-pulse rounded bg-muted" style={{ maxWidth: `${60 - i * 6}%` }} />
+                <span className="h-3 w-16 animate-pulse rounded bg-muted" />
+              </li>
+            ))}
+          </ul>
         )}
 
         {countries.length > 0 && !query && (
