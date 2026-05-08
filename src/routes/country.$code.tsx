@@ -73,16 +73,16 @@ function CountryPage() {
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-8 md:py-14">
       <div className="flex items-center justify-between">
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
-          <span aria-hidden>←</span> Back to search
+          <span aria-hidden>←</span> {t("country.back")}
         </Link>
         <div className="flex items-center gap-4">
           <button
             onClick={() => toggle(country.cca3)}
             aria-pressed={isFavourite(country.cca3)}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
-            title={isFavourite(country.cca3) ? "Remove from favourites" : "Add to favourites"}
+            title={isFavourite(country.cca3) ? t("country.fav.removeTitle") : t("country.fav.addTitle")}
           >
-            {isFavourite(country.cca3) ? "★ Favourited" : "☆ Add favourite"}
+            {isFavourite(country.cca3) ? t("country.fav.remove") : t("country.fav.add")}
           </button>
           <button
             onClick={async () => {
@@ -93,19 +93,19 @@ function CountryPage() {
                   await navigator.share({ title, url });
                 } else {
                   await navigator.clipboard.writeText(url);
-                  alert("Link copied to clipboard");
+                  alert(t("country.share.copied"));
                 }
               } catch { /* user cancelled */ }
             }}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
           >
-            ↗ Share
+            {t("country.share")}
           </button>
           <button
             onClick={() => navigate({ to: "/" })}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
           >
-            New search
+            {t("country.newSearch")}
           </button>
         </div>
       </div>
