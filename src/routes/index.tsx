@@ -3,12 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 import { useFavourites } from "@/lib/favourites";
 import { SiteFooter } from "@/components/SiteFooter";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [countries, setCountries] = useState<Country[]>([]);
   const [query, setQuery] = useState("");
@@ -38,7 +40,14 @@ function Index() {
   const [pickedDev, setPickedDev] = useState<Country | null>(null);
   const [pickedDing, setPickedDing] = useState<Country | null>(null);
   const [continent, setContinent] = useState<string>("All");
-  const CONTINENTS = ["All", "Africa", "Americas", "Asia", "Europe", "Oceania"] as const;
+  const CONTINENTS: { key: typeof continent; label: string }[] = [
+    { key: "All", label: t("home.continent.all") },
+    { key: "Africa", label: t("home.continent.africa") },
+    { key: "Americas", label: t("home.continent.americas") },
+    { key: "Asia", label: t("home.continent.asia") },
+    { key: "Europe", label: t("home.continent.europe") },
+    { key: "Oceania", label: t("home.continent.oceania") },
+  ];
 
   // ISO cca3 codes commonly classified as "developed economies" (IMF Advanced Economies + a few high-income micro-states).
   const DEVELOPED = new Set([
@@ -73,20 +82,18 @@ function Index() {
       <header>
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium uppercase tracking-widest text-clay backdrop-blur">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          Live data · World Bank, UN & Worldometer-aligned
+          {t("home.badge")}
         </div>
         <h1 className="mt-6 text-5xl font-black leading-[0.95] md:text-7xl">
-          The pulse of{" "}
+          {t("home.title.a")}{" "}
           <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-ember)" }}>
-            every nation
+            {t("home.title.b")}
           </span>
           .
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-          Search any country to open its full demographic profile — population, life expectancy, fertility, urbanisation and more.
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-muted-foreground">{t("home.subtitle")}</p>
         <p className="mt-4 text-sm text-muted-foreground">
-          By <span className="font-semibold text-foreground">Pranshi Tripathi</span> · Last updated <time dateTime="2026-05-08">8 May 2026</time>
+          {t("home.by")} <span className="font-semibold text-foreground">Pranshi Tripathi</span> · {t("home.lastUpdated")} <time dateTime="2026-05-08">8 May 2026</time>
         </p>
       </header>
 
