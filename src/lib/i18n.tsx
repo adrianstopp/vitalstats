@@ -1983,7 +1983,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new CustomEvent(EVT, { detail: l }));
     if (typeof document !== "undefined") {
       document.documentElement.lang = l;
-      document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+      document.documentElement.dir = (l === "ar" || l === "fa" || l === "ur") ? "rtl" : "ltr";
     }
   };
 
