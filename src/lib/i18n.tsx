@@ -1973,7 +1973,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const onChange = (e: Event) => {
       const next = (e as CustomEvent<LangCode>).detail;
       if (next && T[next]) setLangState(next);
-      if (next && T[next]) setLangState(next);
+    };
     window.addEventListener(EVT, onChange);
     return () => window.removeEventListener(EVT, onChange);
   }, []);
