@@ -55,7 +55,7 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootShell,
-  component: () => <I18nProvider><Outlet /></I18nProvider>,
+  component: () => <I18nProvider><SiteHeader /><Outlet /></I18nProvider>,
   notFoundComponent: NotFoundComponent,
 });
 
