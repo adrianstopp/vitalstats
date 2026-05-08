@@ -13,6 +13,7 @@ function Index() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState(0);
+  const { favourites } = useFavourites();
 
   useEffect(() => {
     fetchCountries().then(setCountries);
