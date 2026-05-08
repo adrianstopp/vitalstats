@@ -4,6 +4,7 @@ import { fetchCountries, fmtNum, INDICATORS, type Country, type WBPoint } from "
 import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
 import { useFavourites } from "@/lib/favourites";
 import { SiteFooter } from "@/components/SiteFooter";
+import { FunFactModal } from "@/components/FunFactModal";
 
 export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
@@ -188,6 +189,7 @@ function CountryPage() {
       </div>
 
       <SiteFooter />
+      <FunFactModal country={country.name.common} code={country.cca3} />
     </div>
   );
 }
