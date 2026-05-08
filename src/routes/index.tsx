@@ -235,7 +235,7 @@ function Index() {
           return (
             <>
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Continent</span>
+                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("home.continent")}</span>
                 {CONTINENTS.map((k) => {
                   const active = continent === k.key;
                   return (
