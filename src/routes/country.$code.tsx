@@ -123,9 +123,9 @@ function CountryPage() {
             <h1 className="mt-2 text-5xl font-black md:text-6xl">{country.name.common}</h1>
             <p className="mt-1 text-base opacity-80">{country.name.official}</p>
             <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-90">
-              <span><strong>Capital:</strong> {country.capital?.[0] ?? "—"}</span>
-              <span><strong>Area:</strong> {country.area.toLocaleString()} km²</span>
-              <span><strong>Languages:</strong> {country.languages ? Object.values(country.languages).slice(0, 3).join(", ") : "—"}</span>
+              <span><strong>{t("country.capital")}:</strong> {country.capital?.[0] ?? "—"}</span>
+              <span><strong>{t("country.area")}:</strong> {country.area.toLocaleString()} km²</span>
+              <span><strong>{t("country.languages")}:</strong> {country.languages ? Object.values(country.languages).slice(0, 3).join(", ") : "—"}</span>
             </div>
           </div>
           <img src={country.flags.svg} alt={`Flag of ${country.name.common}`} className="h-28 w-44 rounded-xl object-cover ring-4 ring-white/30" />
