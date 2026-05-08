@@ -213,12 +213,13 @@ function DualLineChart({
 }) {
   const w = 800, h = 280, padL = 50, padR = 20, padT = 24, padB = 30;
 
+  const { t } = useI18n();
   if (a.length < 2 && b.length < 2) {
     return (
       <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
         <h2 className="text-2xl font-bold">{title}</h2>
         <p className="text-sm text-muted-foreground">{subtitle}</p>
-        <p className="mt-6 text-sm text-muted-foreground">No historical data available for this pair.</p>
+        <p className="mt-6 text-sm text-muted-foreground">{t("compare.noHistory")}</p>
       </section>
     );
   }
