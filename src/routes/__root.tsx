@@ -1,7 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { I18nProvider } from "@/lib/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n";
 
 const themeScript = `(function(){try{var t=localStorage.getItem("vitalstats:theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}if(t==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`;
 
@@ -14,8 +14,6 @@ function NotFoundComponent() {
 }
 
 function NotFoundInner() {
-  // Lazy import to keep tree small
-  const { useI18n } = require("@/lib/i18n") as typeof import("@/lib/i18n");
   const { t } = useI18n();
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
