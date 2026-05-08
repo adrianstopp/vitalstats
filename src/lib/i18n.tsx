@@ -1990,7 +1990,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.lang = lang;
-      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.documentElement.dir = (lang === "ar" || lang === "fa" || lang === "ur") ? "rtl" : "ltr";
     }
   }, [lang]);
 
