@@ -161,7 +161,14 @@ function CountryPage() {
       })()}
 
 
-      {history.length > 1 && <PopulationChart data={history} />}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {history.length > 1 && (
+          <TrendChart title="Population over time" data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
+        )}
+        {lifeHistory.length > 1 && (
+          <TrendChart title="Life expectancy over time" data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
+        )}
+      </div>
 
       <SiteFooter />
     </div>
@@ -184,7 +191,7 @@ function StatCard({
   );
 }
 
-function PopulationChart({ data }: { data: WBPoint[] }) {
+function TrendChart({ title, data, format, gradId }: { title: string; data: WBPoint[]; format: (v: number) => string; gradId: string }) {
   const w = 800, h = 240, pad = 30;
   const values = data.map((d) => d.value as number);
   const min = Math.min(...values), max = Math.max(...values);
@@ -196,19 +203,19 @@ function PopulationChart({ data }: { data: WBPoint[] }) {
 
   return (
     <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
-      <h2 className="text-2xl font-bold">Population over time</h2>
+      <h2 className="text-2xl font-bold">{title}</h2>
       <p className="text-sm text-muted-foreground">{firstYear} → {lastYear}</p>
       <svg viewBox={`0 0 ${w} ${h}`} className="mt-4 w-full">
         <defs>
-          <linearGradient id="warm-fill" x1="0" x2="0" y1="0" y2="1">
+          <linearGradient id={gradId} x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="var(--coral)" stopOpacity="0.55" />
             <stop offset="100%" stopColor="var(--sun)" stopOpacity="0.05" />
           </linearGradient>
         </defs>
-        <path d={area} fill="url(#warm-fill)" />
+        <path d={area} fill={`url(#${gradId})`} />
         <path d={path} fill="none" stroke="var(--ember)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <text x={pad} y={h - 8} fontSize="11" fill="var(--muted-foreground)">{firstYear}: {fmtNum(values[0])}</text>
-        <text x={w - pad} y={h - 8} fontSize="11" textAnchor="end" fill="var(--muted-foreground)">{lastYear}: {fmtNum(values[values.length - 1])}</text>
+        <text x={pad} y={h - 8} fontSize="11" fill="var(--muted-foreground)">{firstYear}: {format(values[0])}</text>
+        <text x={w - pad} y={h - 8} fontSize="11" textAnchor="end" fill="var(--muted-foreground)">{lastYear}: {format(values[values.length - 1])}</text>
       </svg>
     </section>
   );
