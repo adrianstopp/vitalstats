@@ -254,8 +254,8 @@ function Index() {
                 })}
               </div>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <Panel title="Developed countries" list={developed} open={devOpen} setOpen={setDevOpen} picked={pickedDev} setPicked={setPickedDev} />
-                <Panel title="Developing countries" list={developing} open={dingOpen} setOpen={setDingOpen} picked={pickedDing} setPicked={setPickedDing} />
+                <Panel title={t("home.developed")} list={developed} open={devOpen} setOpen={setDevOpen} picked={pickedDev} setPicked={setPickedDev} />
+                <Panel title={t("home.developing")} list={developing} open={dingOpen} setOpen={setDingOpen} picked={pickedDing} setPicked={setPickedDing} />
               </div>
               {pickedDev && pickedDing && (
                 <button
