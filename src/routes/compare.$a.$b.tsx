@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 import { HDI_2022 } from "@/lib/hdi";
 import { fetchWBSeries } from "@/lib/wb";
+import { useI18n } from "@/lib/i18n";
 
 type Series = { date: string; value: number | null }[];
 
@@ -43,6 +44,7 @@ async function fetchHDI(code: string): Promise<Val> {
 }
 
 function ComparePage() {
+  const { t } = useI18n();
   const { a, b } = Route.useParams();
   const [countries, setCountries] = useState<Country[]>([]);
   const [data, setData] = useState<Record<string, { a: Val; b: Val }>>({});
@@ -89,19 +91,19 @@ function ComparePage() {
   if (countries.length && (!ca || !cb)) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <h1 className="text-3xl font-black">Country not found</h1>
-        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">Back</Link>
+        <h1 className="text-3xl font-black">{t("country.notFound")}</h1>
+        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">{t("back")}</Link>
       </div>
     );
   }
   if (!ca || !cb) {
-    return <div className="mx-auto max-w-6xl px-4 py-20 text-center text-muted-foreground">Loading…</div>;
+    return <div className="mx-auto max-w-6xl px-4 py-20 text-center text-muted-foreground">{t("loading")}</div>;
   }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-8 md:py-14">
       <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
-        <span aria-hidden>←</span> New comparison
+        <span aria-hidden>←</span> {t("compare.back")}
       </Link>
 
       <section
@@ -110,7 +112,7 @@ function ComparePage() {
       >
         <div className="grid grid-cols-1 gap-6 text-primary-foreground md:grid-cols-[1fr_auto_1fr] md:items-center">
           <CountryHeader c={ca} align="left" />
-          <div className="text-center text-3xl font-black opacity-80 md:text-4xl">vs</div>
+          <div className="text-center text-3xl font-black opacity-80 md:text-4xl">{t("home.vs")}</div>
           <CountryHeader c={cb} align="right" />
         </div>
       </section>
@@ -118,17 +120,17 @@ function ComparePage() {
       <section className="rounded-3xl border border-border bg-card/70 p-4 backdrop-blur md:p-6" style={{ boxShadow: "var(--shadow-soft)" }}>
         <div className="mb-4 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-bold">Side-by-side comparison</h2>
-            <p className="text-sm text-muted-foreground">World Bank Open Data · UNDP Human Development Report</p>
+            <h2 className="text-2xl font-bold">{t("compare.title")}</h2>
+            <p className="text-sm text-muted-foreground">{t("compare.sub")}</p>
           </div>
-          {loading && <span className="text-xs text-muted-foreground">Loading…</span>}
+          {loading && <span className="text-xs text-muted-foreground">{t("loading")}</span>}
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-border">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-secondary/60 text-left">
-                <th className="px-4 py-3 font-semibold">Indicator</th>
+                <th className="px-4 py-3 font-semibold">{t("compare.indicator")}</th>
                 <th className="px-4 py-3 text-right font-semibold">{ca.flag} {ca.name.common}</th>
                 <th className="px-4 py-3 text-right font-semibold">{cb.flag} {cb.name.common}</th>
               </tr>
@@ -145,7 +147,7 @@ function ComparePage() {
                 }
                 return (
                   <tr key={m.id} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium">{m.label}</td>
+                    <td className="px-4 py-3 font-medium">{t(`metric.${m.id}`) === `metric.${m.id}` ? m.label : t(`metric.${m.id}`)}</td>
                     <td className={`px-4 py-3 text-right ${aHi ? "font-bold text-primary" : ""}`}>
                       {va ? <>{m.format(va.value)} <span className="text-xs text-muted-foreground">({va.year})</span></> : <span className="text-muted-foreground">—</span>}
                     </td>
@@ -159,29 +161,29 @@ function ComparePage() {
           </table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Bold values indicate the higher-performing country for that indicator (where “higher is better” applies). Dashes mean the source has no recent published value.
+          {t("compare.note")}
         </p>
       </section>
 
       <DualLineChart
-        title="Population over time"
-        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        title={t("compare.popOverTime")}
+        subtitle={`${ca.name.common} ${t("home.vs")} ${cb.name.common} · ${t("compare.subtitleSuffix")}`}
         a={popSeries.a} b={popSeries.b} ca={ca} cb={cb}
         format={(v) => fmtNum(v)}
       />
       <DualLineChart
-        title="Economic growth (GDP, current US$)"
-        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        title={t("compare.gdpOverTime")}
+        subtitle={`${ca.name.common} ${t("home.vs")} ${cb.name.common} · ${t("compare.subtitleSuffix")}`}
         a={gdpSeries.a} b={gdpSeries.b} ca={ca} cb={cb}
         format={(v) => `$${fmtNum(v)}`}
       />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Link to="/country/$code" params={{ code: ca.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
-          Full profile: {ca.flag} {ca.name.common}
+          {t("compare.fullProfile")} {ca.flag} {ca.name.common}
         </Link>
         <Link to="/country/$code" params={{ code: cb.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
-          Full profile: {cb.flag} {cb.name.common}
+          {t("compare.fullProfile")} {cb.flag} {cb.name.common}
         </Link>
       </div>
     </div>
@@ -211,12 +213,13 @@ function DualLineChart({
 }) {
   const w = 800, h = 280, padL = 50, padR = 20, padT = 24, padB = 30;
 
+  const { t } = useI18n();
   if (a.length < 2 && b.length < 2) {
     return (
       <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
         <h2 className="text-2xl font-bold">{title}</h2>
         <p className="text-sm text-muted-foreground">{subtitle}</p>
-        <p className="mt-6 text-sm text-muted-foreground">No historical data available for this pair.</p>
+        <p className="mt-6 text-sm text-muted-foreground">{t("compare.noHistory")}</p>
       </section>
     );
   }

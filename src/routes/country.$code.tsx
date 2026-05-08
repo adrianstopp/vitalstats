@@ -5,6 +5,7 @@ import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
 import { useFavourites } from "@/lib/favourites";
 import { SiteFooter } from "@/components/SiteFooter";
 import { FunFactModal } from "@/components/FunFactModal";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/country/$code")({
 
 function CountryPage() {
   const { code } = Route.useParams();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const { isFavourite, toggle } = useFavourites();
   const [country, setCountry] = useState<Country | null>(null);
@@ -57,30 +59,30 @@ function CountryPage() {
   if (notFound) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <h1 className="text-4xl font-black">Country not found</h1>
-        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">Back to search</Link>
+        <h1 className="text-4xl font-black">{t("country.notFound")}</h1>
+        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">{t("country.back")}</Link>
       </div>
     );
   }
 
   if (!country) {
-    return <div className="mx-auto max-w-7xl px-4 py-20 text-center text-muted-foreground">Loading…</div>;
+    return <div className="mx-auto max-w-7xl px-4 py-20 text-center text-muted-foreground">{t("loading")}</div>;
   }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-8 md:py-14">
       <div className="flex items-center justify-between">
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
-          <span aria-hidden>←</span> Back to search
+          <span aria-hidden>←</span> {t("country.back")}
         </Link>
         <div className="flex items-center gap-4">
           <button
             onClick={() => toggle(country.cca3)}
             aria-pressed={isFavourite(country.cca3)}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
-            title={isFavourite(country.cca3) ? "Remove from favourites" : "Add to favourites"}
+            title={isFavourite(country.cca3) ? t("country.fav.removeTitle") : t("country.fav.addTitle")}
           >
-            {isFavourite(country.cca3) ? "★ Favourited" : "☆ Add favourite"}
+            {isFavourite(country.cca3) ? t("country.fav.remove") : t("country.fav.add")}
           </button>
           <button
             onClick={async () => {
@@ -91,19 +93,19 @@ function CountryPage() {
                   await navigator.share({ title, url });
                 } else {
                   await navigator.clipboard.writeText(url);
-                  alert("Link copied to clipboard");
+                  alert(t("country.share.copied"));
                 }
               } catch { /* user cancelled */ }
             }}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
           >
-            ↗ Share
+            {t("country.share")}
           </button>
           <button
             onClick={() => navigate({ to: "/" })}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
           >
-            New search
+            {t("country.newSearch")}
           </button>
         </div>
       </div>
@@ -121,9 +123,9 @@ function CountryPage() {
             <h1 className="mt-2 text-5xl font-black md:text-6xl">{country.name.common}</h1>
             <p className="mt-1 text-base opacity-80">{country.name.official}</p>
             <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-90">
-              <span><strong>Capital:</strong> {country.capital?.[0] ?? "—"}</span>
-              <span><strong>Area:</strong> {country.area.toLocaleString()} km²</span>
-              <span><strong>Languages:</strong> {country.languages ? Object.values(country.languages).slice(0, 3).join(", ") : "—"}</span>
+              <span><strong>{t("country.capital")}:</strong> {country.capital?.[0] ?? "—"}</span>
+              <span><strong>{t("country.area")}:</strong> {country.area.toLocaleString()} km²</span>
+              <span><strong>{t("country.languages")}:</strong> {country.languages ? Object.values(country.languages).slice(0, 3).join(", ") : "—"}</span>
             </div>
           </div>
           <img src={country.flags.svg} alt={`Flag of ${country.name.common}`} className="h-28 w-44 rounded-xl object-cover ring-4 ring-white/30" />
@@ -133,12 +135,12 @@ function CountryPage() {
       {(() => {
         const wbPop = stats["SP.POP.TOTL"];
         const pop = wbPop?.value ?? country.population;
-        const popSub = wbPop ? `${fmtNum(pop)} people · World Bank ${wbPop.year}` : `${fmtNum(pop)} people`;
+        const popSub = wbPop ? `${fmtNum(pop)} ${t("country.popSub")} ${wbPop.year}` : `${fmtNum(pop)} ${t("label.people")}`;
         return (
           <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <StatCard label="Population" value={Math.round(pop).toLocaleString()} sub={popSub} accent="primary" />
-            <StatCard label="Density" value={`${(pop / Math.max(country.area, 1)).toFixed(1)}`} sub="people / km²" accent="coral" />
-            <StatCard label="Timezones" value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
+            <StatCard label={t("country.population")} value={Math.round(pop).toLocaleString()} sub={popSub} accent="primary" />
+            <StatCard label={t("country.density")} value={`${(pop / Math.max(country.area, 1)).toFixed(1)}`} sub={t("country.densitySub")} accent="coral" />
+            <StatCard label={t("country.timezones")} value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
           </section>
         );
       })()}
@@ -149,26 +151,27 @@ function CountryPage() {
           <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
             <div className="mb-5 flex items-end justify-between">
               <div>
-                <h2 className="text-2xl font-bold">Recent indicators</h2>
+                <h2 className="text-2xl font-bold">{t("country.recentIndicators")}</h2>
                 <p className="text-sm text-muted-foreground">
                   {allEmpty
-                    ? "World Bank does not publish indicators for this territory — see overview below."
-                    : "Latest values from the World Bank Open Data API"}
+                    ? t("country.noIndicators")
+                    : t("country.recentIndicators.sub")}
                 </p>
               </div>
-              {loadingStats && <span className="text-xs text-muted-foreground">Loading…</span>}
+              {loadingStats && <span className="text-xs text-muted-foreground">{t("loading")}</span>}
             </div>
             {!allEmpty && (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {INDICATORS.map((ind) => {
                   const s = stats[ind.id];
+                  const indLabel = t(`ind.${ind.id}`);
                   return (
                     <div key={ind.id} className="rounded-2xl border border-border bg-background/50 p-4">
-                      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{ind.label}</div>
+                      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{indLabel === `ind.${ind.id}` ? ind.label : indLabel}</div>
                       <div className="mt-2 text-2xl font-bold" style={{ color: "var(--ember)" }}>
                         {s ? ind.format(s.value) : loadingStats ? "…" : "—"}
                       </div>
-                      <div className="mt-1 text-xs text-muted-foreground">{s ? `as of ${s.year}` : "no data"}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">{s ? `${t("country.asOf")} ${s.year}` : t("country.noData")}</div>
                     </div>
                   );
                 })}
@@ -181,10 +184,10 @@ function CountryPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {history.length > 1 && (
-          <TrendChart title="Population over time" data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
+          <TrendChart title={t("country.popOverTime")} data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
         )}
         {lifeHistory.length > 1 && (
-          <TrendChart title="Life expectancy over time" data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
+          <TrendChart title={t("country.lifeOverTime")} data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
         )}
       </div>
 

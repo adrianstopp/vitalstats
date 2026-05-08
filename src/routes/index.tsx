@@ -108,7 +108,7 @@ function Index() {
             else if (e.key === "ArrowUp") { e.preventDefault(); setHighlight((h) => Math.max(h - 1, 0)); }
             else if (e.key === "Enter" && matches[highlight]) { go(matches[highlight]); }
           }}
-          placeholder='Search a country (e.g. Sweden) — press "/" to focus'
+          placeholder={t("search.placeholder")}
           className="w-full rounded-xl border border-border bg-background/70 px-5 py-4 text-lg outline-none ring-ring focus:ring-2"
         />
 
@@ -155,7 +155,7 @@ function Index() {
             >
               <span className="text-2xl">{sortedAll[0]?.flag}</span>
               <span className="flex-1 truncate font-semibold">{sortedAll[0]?.name.common}</span>
-              <span className="text-xs text-muted-foreground">Browse all {sortedAll.length}</span>
+              <span className="text-xs text-muted-foreground">{t("home.browseAll")} {sortedAll.length}</span>
               <svg
                 width="18" height="18" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -235,7 +235,7 @@ function Index() {
           return (
             <>
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Continent</span>
+                <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("home.continent")}</span>
                 {CONTINENTS.map((k) => {
                   const active = continent === k.key;
                   return (
@@ -263,7 +263,7 @@ function Index() {
                   className="mt-4 w-full rounded-xl bg-primary px-5 py-3 text-base font-semibold text-primary-foreground shadow-md transition hover:opacity-90"
                   style={{ boxShadow: "var(--shadow-warm)" }}
                 >
-                  Compare {pickedDev.flag} {pickedDev.name.common} vs {pickedDing.flag} {pickedDing.name.common} →
+                  {t("home.compare")} {pickedDev.flag} {pickedDev.name.common} {t("home.vs")} {pickedDing.flag} {pickedDing.name.common} →
                 </button>
               )}
             </>
@@ -272,14 +272,14 @@ function Index() {
       </div>
 
       <div className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Browse by region</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">{t("section.byRegion")}</h2>
         <div className="mt-4 flex flex-wrap gap-2">
           {[
-            { slug: "africa", label: "Africa" },
-            { slug: "americas", label: "Americas" },
-            { slug: "asia", label: "Asia" },
-            { slug: "europe", label: "Europe" },
-            { slug: "oceania", label: "Oceania" },
+            { slug: "africa", label: t("home.continent.africa") },
+            { slug: "americas", label: t("home.continent.americas") },
+            { slug: "asia", label: t("home.continent.asia") },
+            { slug: "europe", label: t("home.continent.europe") },
+            { slug: "oceania", label: t("home.continent.oceania") },
           ].map((r) => (
             <Link
               key={r.slug}
@@ -295,7 +295,7 @@ function Index() {
 
       {countries.length > 0 && favourites.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">★ Your favourites</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">{t("section.favourites")}</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {countries
               .filter((c) => favourites.includes(c.cca3))
@@ -310,7 +310,7 @@ function Index() {
                     <span className="text-3xl">{c.flag}</span>
                     <div>
                       <div className="font-bold group-hover:text-primary">{c.name.common}</div>
-                      <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                      <div className="text-xs text-muted-foreground">{fmtNum(c.population)} {t("label.people")}</div>
                     </div>
                   </div>
                 </Link>
@@ -322,8 +322,8 @@ function Index() {
       {countries.length > 0 && !query && (() => {
         const ranked = [...countries].filter((c) => c.population > 0);
         const sections: { title: string; list: Country[] }[] = [
-          { title: "Most populous", list: [...ranked].sort((a, b) => b.population - a.population).slice(0, 6) },
-          { title: "Least populous", list: [...ranked].sort((a, b) => a.population - b.population).slice(0, 6) },
+          { title: t("section.mostPopulous"), list: [...ranked].sort((a, b) => b.population - a.population).slice(0, 6) },
+          { title: t("section.leastPopulous"), list: [...ranked].sort((a, b) => a.population - b.population).slice(0, 6) },
         ];
         return (
           <div className="mt-10 space-y-8">
@@ -342,7 +342,7 @@ function Index() {
                         <span className="text-3xl">{c.flag}</span>
                         <div>
                           <div className="font-bold group-hover:text-primary">{c.name.common}</div>
-                          <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                          <div className="text-xs text-muted-foreground">{fmtNum(c.population)} {t("label.people")}</div>
                         </div>
                       </div>
                     </Link>
