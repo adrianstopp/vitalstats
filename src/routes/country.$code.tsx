@@ -18,6 +18,7 @@ function CountryPage() {
   const [stats, setStats] = useState<Record<string, { value: number; year: string } | null>>({});
   const [loadingStats, setLoadingStats] = useState(true);
   const [history, setHistory] = useState<WBPoint[]>([]);
+  const [lifeHistory, setLifeHistory] = useState<WBPoint[]>([]);
 
   useEffect(() => {
     fetchCountries().then((all) => {
