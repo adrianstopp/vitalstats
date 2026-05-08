@@ -157,6 +157,8 @@ function CountryPage() {
 
 
       {history.length > 1 && <PopulationChart data={history} />}
+
+      <SiteFooter />
     </div>
   );
 }
