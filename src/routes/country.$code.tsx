@@ -82,6 +82,23 @@ function CountryPage() {
             {isFavourite(country.cca3) ? "★ Favourited" : "☆ Add favourite"}
           </button>
           <button
+            onClick={async () => {
+              const url = window.location.href;
+              const title = `${country.name.common} — VitalStats`;
+              try {
+                if (navigator.share) {
+                  await navigator.share({ title, url });
+                } else {
+                  await navigator.clipboard.writeText(url);
+                  alert("Link copied to clipboard");
+                }
+              } catch { /* user cancelled */ }
+            }}
+            className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
+          >
+            ↗ Share
+          </button>
+          <button
             onClick={() => navigate({ to: "/" })}
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
           >
