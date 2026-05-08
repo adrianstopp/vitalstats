@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 type Theme = "light" | "dark";
 const KEY = "vitalstats:theme";
@@ -11,6 +12,7 @@ function getInitial(): Theme {
 }
 
 export function ThemeToggle() {
+  const { t } = useI18n();
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
@@ -32,10 +34,10 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      aria-label="Toggle dark mode"
+      aria-label={t("theme.toggle")}
       className="rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary transition"
     >
-      {theme === "dark" ? "☀ Light" : "☾ Dark"}
+      {theme === "dark" ? t("theme.light") : t("theme.dark")}
     </button>
   );
 }
