@@ -151,26 +151,27 @@ function CountryPage() {
           <section className="rounded-3xl border border-border bg-card/70 p-6 backdrop-blur md:p-8" style={{ boxShadow: "var(--shadow-soft)" }}>
             <div className="mb-5 flex items-end justify-between">
               <div>
-                <h2 className="text-2xl font-bold">Recent indicators</h2>
+                <h2 className="text-2xl font-bold">{t("country.recentIndicators")}</h2>
                 <p className="text-sm text-muted-foreground">
                   {allEmpty
-                    ? "World Bank does not publish indicators for this territory — see overview below."
-                    : "Latest values from the World Bank Open Data API"}
+                    ? t("country.noIndicators")
+                    : t("country.recentIndicators.sub")}
                 </p>
               </div>
-              {loadingStats && <span className="text-xs text-muted-foreground">Loading…</span>}
+              {loadingStats && <span className="text-xs text-muted-foreground">{t("loading")}</span>}
             </div>
             {!allEmpty && (
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {INDICATORS.map((ind) => {
                   const s = stats[ind.id];
+                  const indLabel = t(`ind.${ind.id}`);
                   return (
                     <div key={ind.id} className="rounded-2xl border border-border bg-background/50 p-4">
-                      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{ind.label}</div>
+                      <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{indLabel === `ind.${ind.id}` ? ind.label : indLabel}</div>
                       <div className="mt-2 text-2xl font-bold" style={{ color: "var(--ember)" }}>
                         {s ? ind.format(s.value) : loadingStats ? "…" : "—"}
                       </div>
-                      <div className="mt-1 text-xs text-muted-foreground">{s ? `as of ${s.year}` : "no data"}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">{s ? `${t("country.asOf")} ${s.year}` : t("country.noData")}</div>
                     </div>
                   );
                 })}
