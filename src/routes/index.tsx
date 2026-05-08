@@ -19,6 +19,19 @@ function Index() {
     fetchCountries().then(setCountries);
   }, []);
 
+  // Press "/" anywhere to focus the search input
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "/") return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      const el = document.getElementById("country-search") as HTMLInputElement | null;
+      if (el) { e.preventDefault(); el.focus(); el.select(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const [allOpen, setAllOpen] = useState(false);
   const [devOpen, setDevOpen] = useState(false);
   const [dingOpen, setDingOpen] = useState(false);
@@ -79,6 +92,7 @@ function Index() {
 
       <div className="mt-10 rounded-3xl border border-border bg-card/70 p-4 backdrop-blur md:p-6" style={{ boxShadow: "var(--shadow-warm)" }}>
         <input
+          id="country-search"
           autoFocus
           value={query}
           onChange={(e) => { setQuery(e.target.value); setHighlight(0); }}
@@ -87,7 +101,7 @@ function Index() {
             else if (e.key === "ArrowUp") { e.preventDefault(); setHighlight((h) => Math.max(h - 1, 0)); }
             else if (e.key === "Enter" && matches[highlight]) { go(matches[highlight]); }
           }}
-          placeholder="Search a country (e.g. Sweden) and press Enter…"
+          placeholder='Search a country (e.g. Sweden) — press "/" to focus'
           className="w-full rounded-xl border border-border bg-background/70 px-5 py-4 text-lg outline-none ring-ring focus:ring-2"
         />
 
