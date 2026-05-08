@@ -322,8 +322,8 @@ function Index() {
       {countries.length > 0 && !query && (() => {
         const ranked = [...countries].filter((c) => c.population > 0);
         const sections: { title: string; list: Country[] }[] = [
-          { title: "Most populous", list: [...ranked].sort((a, b) => b.population - a.population).slice(0, 6) },
-          { title: "Least populous", list: [...ranked].sort((a, b) => a.population - b.population).slice(0, 6) },
+          { title: t("section.mostPopulous"), list: [...ranked].sort((a, b) => b.population - a.population).slice(0, 6) },
+          { title: t("section.leastPopulous"), list: [...ranked].sort((a, b) => a.population - b.population).slice(0, 6) },
         ];
         return (
           <div className="mt-10 space-y-8">
