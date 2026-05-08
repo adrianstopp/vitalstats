@@ -272,14 +272,14 @@ function Index() {
       </div>
 
       <div className="mt-10">
-        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Browse by region</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">{t("section.byRegion")}</h2>
         <div className="mt-4 flex flex-wrap gap-2">
           {[
-            { slug: "africa", label: "Africa" },
-            { slug: "americas", label: "Americas" },
-            { slug: "asia", label: "Asia" },
-            { slug: "europe", label: "Europe" },
-            { slug: "oceania", label: "Oceania" },
+            { slug: "africa", label: t("home.continent.africa") },
+            { slug: "americas", label: t("home.continent.americas") },
+            { slug: "asia", label: t("home.continent.asia") },
+            { slug: "europe", label: t("home.continent.europe") },
+            { slug: "oceania", label: t("home.continent.oceania") },
           ].map((r) => (
             <Link
               key={r.slug}
