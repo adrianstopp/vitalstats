@@ -12,7 +12,7 @@ export const getFunFact = createServerFn({ method: "POST" })
 
     const langNames: Record<string, string> = {
       en: "English", af: "Afrikaans", es: "Spanish", fr: "French", de: "German", pt: "Portuguese",
-      it: "Italian", sv: "Swedish", az: "Azerbaijani", hi: "Hindi", bn: "Bengali",
+      it: "Italian", sv: "Swedish", az: "Azerbaijani", hi: "Hindi", mr: "Marathi", bn: "Bengali",
       ta: "Tamil", te: "Telugu", ml: "Malayalam", ne: "Nepali",
       ur: "Urdu", fa: "Persian (Farsi)", ar: "Arabic", ti: "Tigrinya",
       zh: "Simplified Chinese", ja: "Japanese", ko: "Korean", ru: "Russian", sw: "Swahili",
