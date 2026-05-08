@@ -108,7 +108,7 @@ function Index() {
             else if (e.key === "ArrowUp") { e.preventDefault(); setHighlight((h) => Math.max(h - 1, 0)); }
             else if (e.key === "Enter" && matches[highlight]) { go(matches[highlight]); }
           }}
-          placeholder='Search a country (e.g. Sweden) — press "/" to focus'
+          placeholder={t("search.placeholder")}
           className="w-full rounded-xl border border-border bg-background/70 px-5 py-4 text-lg outline-none ring-ring focus:ring-2"
         />
 
