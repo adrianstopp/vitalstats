@@ -103,7 +103,7 @@ function ComparePage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-10 md:px-8 md:py-14">
       <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
-        <span aria-hidden>←</span> New comparison
+        <span aria-hidden>←</span> {t("compare.back")}
       </Link>
 
       <section
