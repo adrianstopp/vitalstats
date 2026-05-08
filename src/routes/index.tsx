@@ -264,7 +264,28 @@ function Index() {
         })()}
       </div>
 
-      {countries.length > 0 && favourites.length > 0 && (
+      <div className="mt-10">
+        <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">Browse by region</h2>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {[
+            { slug: "africa", label: "Africa" },
+            { slug: "americas", label: "Americas" },
+            { slug: "asia", label: "Asia" },
+            { slug: "europe", label: "Europe" },
+            { slug: "oceania", label: "Oceania" },
+          ].map((r) => (
+            <Link
+              key={r.slug}
+              to="/region/$slug"
+              params={{ slug: r.slug }}
+              className="rounded-full border border-border bg-card/60 px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary"
+            >
+              {r.label} →
+            </Link>
+          ))}
+        </div>
+      </div>
+
         <div className="mt-10">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">★ Your favourites</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
