@@ -286,6 +286,7 @@ function Index() {
         </div>
       </div>
 
+      {countries.length > 0 && favourites.length > 0 && (
         <div className="mt-10">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">★ Your favourites</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
