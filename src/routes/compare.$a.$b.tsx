@@ -112,7 +112,7 @@ function ComparePage() {
       >
         <div className="grid grid-cols-1 gap-6 text-primary-foreground md:grid-cols-[1fr_auto_1fr] md:items-center">
           <CountryHeader c={ca} align="left" />
-          <div className="text-center text-3xl font-black opacity-80 md:text-4xl">vs</div>
+          <div className="text-center text-3xl font-black opacity-80 md:text-4xl">{t("home.vs")}</div>
           <CountryHeader c={cb} align="right" />
         </div>
       </section>
@@ -120,10 +120,10 @@ function ComparePage() {
       <section className="rounded-3xl border border-border bg-card/70 p-4 backdrop-blur md:p-6" style={{ boxShadow: "var(--shadow-soft)" }}>
         <div className="mb-4 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-bold">Side-by-side comparison</h2>
-            <p className="text-sm text-muted-foreground">World Bank Open Data · UNDP Human Development Report</p>
+            <h2 className="text-2xl font-bold">{t("compare.title")}</h2>
+            <p className="text-sm text-muted-foreground">{t("compare.sub")}</p>
           </div>
-          {loading && <span className="text-xs text-muted-foreground">Loading…</span>}
+          {loading && <span className="text-xs text-muted-foreground">{t("loading")}</span>}
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-border">
