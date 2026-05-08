@@ -1973,39 +1973,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const onChange = (e: Event) => {
       const next = (e as CustomEvent<LangCode>).detail;
       if (next && T[next]) setLangState(next);
-  mr: {
-    "nav.home": "मुख्यपृष्ठ", "nav.sources": "स्रोत", "nav.glossary": "शब्दकोश", "nav.about": "विषयी",
-    "footer.data": "डेटा: REST Countries · जागतिक बँक · संयुक्त राष्ट्रे",
-    "lang.label": "भाषा", "back": "← मागे", "backHome": "मुख्यपृष्ठावर परत", "loading": "लोड होत आहे…",
-    "theme.light": "☀ उजळ", "theme.dark": "☾ गडद", "theme.toggle": "गडद मोड बदला",
-    "home.badge": "थेट डेटा · जागतिक बँक, संयुक्त राष्ट्रे आणि Worldometer",
-    "home.title.a": "प्रत्येक राष्ट्राची", "home.title.b": "स्पंदने",
-    "home.subtitle": "कोणताही देश शोधा आणि त्याचे संपूर्ण लोकसंख्याशास्त्रीय प्रोफाइल पहा — लोकसंख्या, आयुर्मान, प्रजनन, शहरीकरण आणि बरेच काही.",
-    "home.by": "द्वारा", "home.lastUpdated": "शेवटचे अद्यतनित",
-    "search.placeholder": "देश शोधा (उदा. स्वीडन) — फोकससाठी \"/\" दाबा",
-    "home.browseAll": "सर्व पहा", "home.continent": "खंड",
-    "home.continent.all": "सर्व", "home.continent.africa": "आफ्रिका", "home.continent.americas": "अमेरिका",
-    "home.continent.asia": "आशिया", "home.continent.europe": "युरोप", "home.continent.oceania": "ओशिनिया",
-    "home.developed": "विकसित देश", "home.developing": "विकसनशील देश",
-    "home.compare": "तुलना", "home.vs": "विरुद्ध",
-    "section.byRegion": "प्रदेशानुसार पहा", "section.favourites": "★ तुमचे आवडते",
-    "section.mostPopulous": "सर्वाधिक लोकसंख्या", "section.leastPopulous": "सर्वात कमी लोकसंख्या",
-    "label.people": "लोक",
-    "country.capital": "राजधानी", "country.area": "क्षेत्रफळ", "country.languages": "भाषा",
-    "country.population": "लोकसंख्या", "country.density": "घनता", "country.timezones": "वेळ क्षेत्रे",
-    "country.densitySub": "लोक / किमी²",
-    "country.recentIndicators": "अलीकडील निर्देशक",
-    "country.share": "↗ शेअर करा", "country.newSearch": "नवीन शोध",
-    "country.fav.add": "☆ आवडत्यांमध्ये जोडा", "country.fav.remove": "★ आवडते",
-    "country.notFound": "देश सापडला नाही",
-    "funfact.title": "तुम्हाला माहित आहे का?", "funfact.loading": "मजेदार तथ्य शोधत आहे…",
-    "funfact.close": "बंद करा", "funfact.error": "आत्ता तथ्य मिळवता आले नाही.",
-    "region.countries": "देश", "region.notFound": "प्रदेश सापडला नाही",
-    "region.empty": "या प्रदेशासाठी देश सापडले नाहीत.",
-    "404.title": "पृष्ठ सापडले नाही", "404.cta": "मुख्यपृष्ठावर जा",
-  },
-
-};
+      if (next && T[next]) setLangState(next);
     window.addEventListener(EVT, onChange);
     return () => window.removeEventListener(EVT, onChange);
   }, []);
