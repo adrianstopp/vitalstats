@@ -295,7 +295,7 @@ function Index() {
 
       {countries.length > 0 && favourites.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">★ Your favourites</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">{t("section.favourites")}</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {countries
               .filter((c) => favourites.includes(c.cca3))
