@@ -44,6 +44,7 @@ async function fetchHDI(code: string): Promise<Val> {
 }
 
 function ComparePage() {
+  const { t } = useI18n();
   const { a, b } = Route.useParams();
   const [countries, setCountries] = useState<Country[]>([]);
   const [data, setData] = useState<Record<string, { a: Val; b: Val }>>({});
