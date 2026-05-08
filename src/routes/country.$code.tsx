@@ -184,10 +184,10 @@ function CountryPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {history.length > 1 && (
-          <TrendChart title="Population over time" data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
+          <TrendChart title={t("country.popOverTime")} data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
         )}
         {lifeHistory.length > 1 && (
-          <TrendChart title="Life expectancy over time" data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
+          <TrendChart title={t("country.lifeOverTime")} data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
         )}
       </div>
 
