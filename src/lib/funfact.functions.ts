@@ -11,9 +11,11 @@ export const getFunFact = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
 
     const langNames: Record<string, string> = {
-      en: "English", es: "Spanish", fr: "French", de: "German", pt: "Portuguese",
-      it: "Italian", hi: "Hindi", bn: "Bengali", ar: "Arabic", zh: "Simplified Chinese",
-      ja: "Japanese", ru: "Russian", sw: "Swahili",
+      en: "English", af: "Afrikaans", es: "Spanish", fr: "French", de: "German", pt: "Portuguese",
+      it: "Italian", sv: "Swedish", az: "Azerbaijani", hi: "Hindi", bn: "Bengali",
+      ta: "Tamil", te: "Telugu", ml: "Malayalam", ne: "Nepali",
+      ur: "Urdu", fa: "Persian (Farsi)", ar: "Arabic", ti: "Tigrinya",
+      zh: "Simplified Chinese", ja: "Japanese", ko: "Korean", ru: "Russian", sw: "Swahili",
     };
     const lang = langNames[data.lang] ?? "English";
 
