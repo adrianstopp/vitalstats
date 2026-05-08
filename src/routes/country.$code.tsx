@@ -59,14 +59,14 @@ function CountryPage() {
   if (notFound) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <h1 className="text-4xl font-black">Country not found</h1>
-        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">Back to search</Link>
+        <h1 className="text-4xl font-black">{t("country.notFound")}</h1>
+        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-primary-foreground">{t("country.back")}</Link>
       </div>
     );
   }
 
   if (!country) {
-    return <div className="mx-auto max-w-7xl px-4 py-20 text-center text-muted-foreground">Loading…</div>;
+    return <div className="mx-auto max-w-7xl px-4 py-20 text-center text-muted-foreground">{t("loading")}</div>;
   }
 
   return (
