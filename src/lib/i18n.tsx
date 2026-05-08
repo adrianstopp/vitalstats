@@ -11,6 +11,7 @@ export const LANGUAGES = [
   { code: "sv", label: "Svenska" },
   { code: "az", label: "Azərbaycanca" },
   { code: "hi", label: "हिन्दी" },
+  { code: "mr", label: "मराठी" },
   { code: "bn", label: "বাংলা" },
   { code: "ta", label: "தமிழ்" },
   { code: "te", label: "తెలుగు" },
