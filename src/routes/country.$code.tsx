@@ -135,12 +135,12 @@ function CountryPage() {
       {(() => {
         const wbPop = stats["SP.POP.TOTL"];
         const pop = wbPop?.value ?? country.population;
-        const popSub = wbPop ? `${fmtNum(pop)} people · World Bank ${wbPop.year}` : `${fmtNum(pop)} people`;
+        const popSub = wbPop ? `${fmtNum(pop)} ${t("country.popSub")} ${wbPop.year}` : `${fmtNum(pop)} ${t("label.people")}`;
         return (
           <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <StatCard label="Population" value={Math.round(pop).toLocaleString()} sub={popSub} accent="primary" />
-            <StatCard label="Density" value={`${(pop / Math.max(country.area, 1)).toFixed(1)}`} sub="people / km²" accent="coral" />
-            <StatCard label="Timezones" value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
+            <StatCard label={t("country.population")} value={Math.round(pop).toLocaleString()} sub={popSub} accent="primary" />
+            <StatCard label={t("country.density")} value={`${(pop / Math.max(country.area, 1)).toFixed(1)}`} sub={t("country.densitySub")} accent="coral" />
+            <StatCard label={t("country.timezones")} value={String(country.timezones.length)} sub={country.timezones.slice(0, 2).join(", ")} accent="sun" />
           </section>
         );
       })()}
