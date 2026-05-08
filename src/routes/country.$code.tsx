@@ -4,7 +4,7 @@ import { fetchCountries, fmtNum, INDICATORS, type Country, type WBPoint } from "
 import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
 import { useFavourites } from "@/lib/favourites";
 import { SiteFooter } from "@/components/SiteFooter";
-import { FunFactModal } from "@/components/FunFactModal";
+import { FunFactCard } from "@/components/FunFactCard";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/country/$code")({
@@ -182,7 +182,11 @@ function CountryPage() {
       })()}
 
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="mt-8">
+        <FunFactCard country={country.name.common} code={country.cca3} />
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
         {history.length > 1 && (
           <TrendChart title={t("country.popOverTime")} data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
         )}
@@ -192,7 +196,6 @@ function CountryPage() {
       </div>
 
       <SiteFooter />
-      <FunFactModal country={country.name.common} code={country.cca3} />
     </div>
   );
 }
