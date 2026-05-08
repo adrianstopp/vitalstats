@@ -237,18 +237,18 @@ function Index() {
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Continent</span>
                 {CONTINENTS.map((k) => {
-                  const active = continent === k;
+                  const active = continent === k.key;
                   return (
                     <button
-                      key={k}
-                      onClick={() => setContinent(k)}
+                      key={k.key}
+                      onClick={() => setContinent(k.key)}
                       className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-background/50 text-muted-foreground hover:border-primary hover:text-primary"
                       }`}
                     >
-                      {k}
+                      {k.label}
                     </button>
                   );
                 })}
