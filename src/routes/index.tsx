@@ -21,19 +21,6 @@ function Index() {
     fetchCountries().then(setCountries);
   }, []);
 
-  // Press "/" anywhere to focus the search input
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "/") return;
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-      const el = document.getElementById("country-search") as HTMLInputElement | null;
-      if (el) { e.preventDefault(); el.focus(); el.select(); }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   const [allOpen, setAllOpen] = useState(false);
   const [devOpen, setDevOpen] = useState(false);
   const [dingOpen, setDingOpen] = useState(false);
