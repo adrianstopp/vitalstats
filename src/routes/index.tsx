@@ -263,7 +263,7 @@ function Index() {
                   className="mt-4 w-full rounded-xl bg-primary px-5 py-3 text-base font-semibold text-primary-foreground shadow-md transition hover:opacity-90"
                   style={{ boxShadow: "var(--shadow-warm)" }}
                 >
-                  Compare {pickedDev.flag} {pickedDev.name.common} vs {pickedDing.flag} {pickedDing.name.common} →
+                  {t("home.compare")} {pickedDev.flag} {pickedDev.name.common} {t("home.vs")} {pickedDing.flag} {pickedDing.name.common} →
                 </button>
               )}
             </>
