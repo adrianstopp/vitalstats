@@ -9,10 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SourcesRouteImport } from './routes/sources'
+import { Route as GlossaryRouteImport } from './routes/glossary'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CountryCodeRouteImport } from './routes/country.$code'
 import { Route as CompareABRouteImport } from './routes/compare.$a.$b'
 
+const SourcesRoute = SourcesRouteImport.update({
+  id: '/sources',
+  path: '/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +49,88 @@ const CompareABRoute = CompareABRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/glossary': typeof GlossaryRoute
+  '/sources': typeof SourcesRoute
   '/country/$code': typeof CountryCodeRoute
   '/compare/$a/$b': typeof CompareABRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/country/$code' | '/compare/$a/$b'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/glossary'
+    | '/sources'
+    | '/country/$code'
+    | '/compare/$a/$b'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/country/$code' | '/compare/$a/$b'
-  id: '__root__' | '/' | '/country/$code' | '/compare/$a/$b'
+  to:
+    | '/'
+    | '/about'
+    | '/glossary'
+    | '/sources'
+    | '/country/$code'
+    | '/compare/$a/$b'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/glossary'
+    | '/sources'
+    | '/country/$code'
+    | '/compare/$a/$b'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  GlossaryRoute: typeof GlossaryRoute
+  SourcesRoute: typeof SourcesRoute
   CountryCodeRoute: typeof CountryCodeRoute
   CompareABRoute: typeof CompareABRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sources': {
+      id: '/sources'
+      path: '/sources'
+      fullPath: '/sources'
+      preLoaderRoute: typeof SourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  GlossaryRoute: GlossaryRoute,
+  SourcesRoute: SourcesRoute,
   CountryCodeRoute: CountryCodeRoute,
   CompareABRoute: CompareABRoute,
 }
