@@ -161,29 +161,29 @@ function ComparePage() {
           </table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Bold values indicate the higher-performing country for that indicator (where “higher is better” applies). Dashes mean the source has no recent published value.
+          {t("compare.note")}
         </p>
       </section>
 
       <DualLineChart
-        title="Population over time"
-        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        title={t("compare.popOverTime")}
+        subtitle={`${ca.name.common} ${t("home.vs")} ${cb.name.common} · ${t("compare.subtitleSuffix")}`}
         a={popSeries.a} b={popSeries.b} ca={ca} cb={cb}
         format={(v) => fmtNum(v)}
       />
       <DualLineChart
-        title="Economic growth (GDP, current US$)"
-        subtitle={`${ca.name.common} vs ${cb.name.common} · World Bank, 1960–present`}
+        title={t("compare.gdpOverTime")}
+        subtitle={`${ca.name.common} ${t("home.vs")} ${cb.name.common} · ${t("compare.subtitleSuffix")}`}
         a={gdpSeries.a} b={gdpSeries.b} ca={ca} cb={cb}
         format={(v) => `$${fmtNum(v)}`}
       />
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Link to="/country/$code" params={{ code: ca.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
-          Full profile: {ca.flag} {ca.name.common}
+          {t("compare.fullProfile")} {ca.flag} {ca.name.common}
         </Link>
         <Link to="/country/$code" params={{ code: cb.cca3 }} className="rounded-2xl border border-border bg-card/70 p-4 text-center font-semibold backdrop-blur transition hover:border-primary hover:text-primary">
-          Full profile: {cb.flag} {cb.name.common}
+          {t("compare.fullProfile")} {cb.flag} {cb.name.common}
         </Link>
       </div>
     </div>
