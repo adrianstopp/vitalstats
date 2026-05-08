@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
 import { HDI_2022 } from "@/lib/hdi";
 import { fetchWBSeries } from "@/lib/wb";
+import { useI18n } from "@/lib/i18n";
 
 type Series = { date: string; value: number | null }[];
 
