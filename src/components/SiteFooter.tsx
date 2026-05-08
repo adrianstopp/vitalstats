@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function SiteFooter() {
   return (
@@ -9,6 +10,9 @@ export function SiteFooter() {
         <Link to="/glossary" className="hover:text-primary">Glossary</Link>
         <Link to="/about" className="hover:text-primary">About</Link>
       </nav>
+      <div className="mt-5 flex justify-center">
+        <ThemeToggle />
+      </div>
       <p className="mt-4">Data: REST Countries · World Bank Open Data · UN</p>
     </footer>
   );
