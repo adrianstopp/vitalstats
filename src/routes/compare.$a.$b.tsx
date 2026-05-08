@@ -130,7 +130,7 @@ function ComparePage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-secondary/60 text-left">
-                <th className="px-4 py-3 font-semibold">Indicator</th>
+                <th className="px-4 py-3 font-semibold">{t("compare.indicator")}</th>
                 <th className="px-4 py-3 text-right font-semibold">{ca.flag} {ca.name.common}</th>
                 <th className="px-4 py-3 text-right font-semibold">{cb.flag} {cb.name.common}</th>
               </tr>
