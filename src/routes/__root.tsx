@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts, ScriptOnce } from 
 
 import appCss from "../styles.css?url";
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const themeScript = `(function(){try{var t=localStorage.getItem("vitalstats:theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}if(t==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`;
 
@@ -54,7 +55,7 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootShell,
-  component: () => <I18nProvider><Outlet /></I18nProvider>,
+  component: () => <I18nProvider><SiteHeader /><Outlet /></I18nProvider>,
   notFoundComponent: NotFoundComponent,
 });
 
