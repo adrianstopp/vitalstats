@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { fetchCountries, fmtNum, INDICATORS, type Country, type WBPoint } from "@/lib/countries";
 import { fetchWBLatest, fetchWBSeries } from "@/lib/wb";
+import { useFavourites } from "@/lib/favourites";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/country/$code")({
   component: CountryPage,
@@ -10,6 +12,7 @@ export const Route = createFileRoute("/country/$code")({
 function CountryPage() {
   const { code } = Route.useParams();
   const navigate = useNavigate();
+  const { isFavourite, toggle } = useFavourites();
   const [country, setCountry] = useState<Country | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [stats, setStats] = useState<Record<string, { value: number; year: string } | null>>({});
@@ -64,12 +67,22 @@ function CountryPage() {
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
           <span aria-hidden>←</span> Back to search
         </Link>
-        <button
-          onClick={() => navigate({ to: "/" })}
-          className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
-        >
-          New search
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => toggle(country.cca3)}
+            aria-pressed={isFavourite(country.cca3)}
+            className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
+            title={isFavourite(country.cca3) ? "Remove from favourites" : "Add to favourites"}
+          >
+            {isFavourite(country.cca3) ? "★ Favourited" : "☆ Add favourite"}
+          </button>
+          <button
+            onClick={() => navigate({ to: "/" })}
+            className="text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
+          >
+            New search
+          </button>
+        </div>
       </div>
 
       <section
@@ -144,6 +157,8 @@ function CountryPage() {
 
 
       {history.length > 1 && <PopulationChart data={history} />}
+
+      <SiteFooter />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchCountries, fmtNum, type Country } from "@/lib/countries";
+import { useFavourites } from "@/lib/favourites";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -11,6 +13,7 @@ function Index() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState(0);
+  const { favourites } = useFavourites();
 
   useEffect(() => {
     fetchCountries().then(setCountries);
@@ -239,6 +242,32 @@ function Index() {
         })()}
       </div>
 
+      {countries.length > 0 && favourites.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">★ Your favourites</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {countries
+              .filter((c) => favourites.includes(c.cca3))
+              .map((c) => (
+                <Link
+                  key={c.cca3}
+                  to="/country/$code"
+                  params={{ code: c.cca3 }}
+                  className="group rounded-2xl border border-border bg-card/70 p-4 backdrop-blur transition hover:-translate-y-0.5 hover:border-primary"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{c.flag}</span>
+                    <div>
+                      <div className="font-bold group-hover:text-primary">{c.name.common}</div>
+                      <div className="text-xs text-muted-foreground">{fmtNum(c.population)} people</div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </div>
+      )}
+
       {countries.length > 0 && !query && (() => {
         const ranked = [...countries].filter((c) => c.population > 0);
         const sections: { title: string; list: Country[] }[] = [
@@ -274,9 +303,7 @@ function Index() {
         );
       })()}
 
-      <footer className="mt-auto pt-16 text-center text-xs text-muted-foreground">
-        Data: REST Countries · World Bank Open Data
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
