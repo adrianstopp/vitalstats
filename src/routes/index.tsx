@@ -69,6 +69,9 @@ function Index() {
         <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
           Search any country to open its full demographic profile — population, life expectancy, fertility, urbanisation and more.
         </p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          By <span className="font-semibold text-foreground">Pranshi Tripathi</span> · Last updated <time dateTime="2026-05-08">8 May 2026</time>
+        </p>
       </header>
 
       <div className="mt-10 rounded-3xl border border-border bg-card/70 p-4 backdrop-blur md:p-6" style={{ boxShadow: "var(--shadow-warm)" }}>
