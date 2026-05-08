@@ -147,7 +147,7 @@ function ComparePage() {
                 }
                 return (
                   <tr key={m.id} className="border-t border-border">
-                    <td className="px-4 py-3 font-medium">{m.label}</td>
+                    <td className="px-4 py-3 font-medium">{t(`metric.${m.id}`) === `metric.${m.id}` ? m.label : t(`metric.${m.id}`)}</td>
                     <td className={`px-4 py-3 text-right ${aHi ? "font-bold text-primary" : ""}`}>
                       {va ? <>{m.format(va.value)} <span className="text-xs text-muted-foreground">({va.year})</span></> : <span className="text-muted-foreground">—</span>}
                     </td>
