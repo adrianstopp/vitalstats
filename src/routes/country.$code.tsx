@@ -182,11 +182,7 @@ function CountryPage() {
       })()}
 
 
-      <div className="mt-8">
-        <FunFactCard country={country.name.common} code={country.cca3} />
-      </div>
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {history.length > 1 && (
           <TrendChart title={t("country.popOverTime")} data={history} format={(v) => fmtNum(v)} gradId="pop-fill" />
         )}
@@ -194,6 +190,8 @@ function CountryPage() {
           <TrendChart title={t("country.lifeOverTime")} data={lifeHistory} format={(v) => `${v.toFixed(1)} yrs`} gradId="life-fill" />
         )}
       </div>
+
+      <FunFactCard country={country.name.common} code={country.cca3} />
 
       <SiteFooter />
     </div>
