@@ -33,6 +33,7 @@ function CountryPage() {
     setLoadingStats(true);
     setStats({});
     setHistory([]);
+    setLifeHistory([]);
 
     Promise.all(
       INDICATORS.map(async (ind) => {
@@ -46,6 +47,9 @@ function CountryPage() {
 
     fetchWBSeries(country.cca3, "SP.POP.TOTL", 40).then((pts) => {
       setHistory(pts.filter((p) => p.value !== null).reverse());
+    });
+    fetchWBSeries(country.cca3, "SP.DYN.LE00.IN", 40).then((pts) => {
+      setLifeHistory(pts.filter((p) => p.value !== null).reverse());
     });
   }, [country]);
 
